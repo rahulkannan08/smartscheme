@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART THITTAM - Tamil Nadu Government Scheme Portal</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="assets/images/lionsymbol.png" alt="logo">
+            <h1>Tamil Nadu SMART SCHEME</h1>
+        </div>
+        <nav>
+            <a href="index.html">
+                <span class="material-icons">home</span>
+                <p>Home</p>
+            </a>
+            <a href="#about">
+                <span class="material-icons">info</span>
+                <p>About</p>
+            </a>
+            <a href="schemes.html">
+                <span class="material-icons">description</span>
+                <p>Schemes</p>
+            </a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span class="material-icons">menu</span>
+        </button>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu">
+            <a href="index.html">
+                <span class="material-icons">home</span>
+                Home
+            </a>
+            <a href="#about">
+                <span class="material-icons">info</span>
+                About
+            </a>
+            <a href="schemes.html">
+                <span class="material-icons">description</span>
+                Schemes
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>
+                    Discover Government Schemes
+                </h1>
+                <p>
+                    Find and apply for government schemes available in Tamil Nadu. Get personalized recommendations and expert guidance.
+                </p>
+                <div class="hero-buttons">
+                    <a href="schemes.html">
+                        Browse Schemes
+                    </a>
+                    <button id="chatbot-btn" class="secondary">
+                        Ask AI Assistant
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Total Schemes Section -->
+        <section class="section bg-gray-50">
+            <div class="container">
+                <div class="grid grid-cols-1 md:grid-cols-3">
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">description</span>
+                        </div>
+                        <h3>200+</h3>
+                        <p>Total Schemes Available in Tamil Nadu</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">category</span>
+                        </div>
+                        <h3>15+</h3>
+                        <p>Categories Covered</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">support_agent</span>
+                        </div>
+                        <h3>24/7</h3>
+                        <p>AI Assistant Support</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Scheme Categories</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4">
+                    <div class="card" onclick="filterByCategory('Education')">
+                        <div class="card-icon">
+                            <span class="material-icons">school</span>
+                        </div>
+                        <h3>Education</h3>
+                    </div>
+                    <div class="card" onclick="filterByCategory('Agriculture')">
+                        <div class="card-icon">
+                            <span class="material-icons">agriculture</span>
+                        </div>
+                        <h3>Agriculture</h3>
+                    </div>
+                    <div class="card" onclick="filterByCategory('Healthcare')">
+                        <div class="card-icon">
+                            <span class="material-icons">local_hospital</span>
+                        </div>
+                        <h3>Healthcare</h3>
+                    </div>
+                    <div class="card" onclick="filterByCategory('Women Empowerment')">
+                        <div class="card-icon">
+                            <span class="material-icons">women</span>
+                        </div>
+                        <h3>Women Empowerment</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Apply Section -->
+        <section class="section bg-gray-50">
+            <div class="container">
+                <h2 class="section-title">How to Apply</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3">
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">person_add</span>
+                        </div>
+                        <h3>Enter Your Details</h3>
+                        <p>Start by entering your Tamil Nadu residence details to find relevant schemes</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">search</span>
+                        </div>
+                        <h3>Find Schemes</h3>
+                        <p>Browse through available schemes and filter by your requirements</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <span class="material-icons">send</span>
+                        </div>
+                        <h3>Apply Online</h3>
+                        <p>Submit your application with required documents through our portal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-title">About SMART THITTAM</h2>
+                    <p class="text-lg mb-8">
+                        SMART THITTAM is a comprehensive platform designed to bridge the gap between Tamil Nadu government schemes and its citizens. 
+                        We provide easy access to all government schemes available in Tamil Nadu, ensuring that every citizen can take advantage 
+                        of the benefits they are entitled to.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 mt-12">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Our Mission</h3>
+                            <p>To empower Tamil Nadu citizens by providing comprehensive information about government schemes available in our state.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Who We Serve</h3>
+                            <p>All Tamil Nadu citizens looking to benefit from government initiatives and programs available in our state.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">What We Do</h3>
+                            <p>Providing accurate, up-to-date information and guidance on all available schemes for Tamil Nadu residents.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section bg-gray-50">
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="max-w-3xl mx-auto">
+                    <div class="card">
+                        <button class="w-full text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">How do I know if I'm eligible for a scheme?</span>
+                            <span class="material-icons">expand_more</span>
+                        </button>
+                        <div class="hidden">
+                            <p>Eligibility criteria are usually mentioned in the scheme details. You can also track your application status through our portal.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <button class="w-full text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">Can I apply for multiple schemes at once?</span>
+                            <span class="material-icons">expand_more</span>
+                        </button>
+                        <div class="hidden">
+                            <p>Yes, you can apply for multiple schemes, but some schemes may have restrictions on availing benefits from multiple sources, so it's important to read the terms and conditions carefully.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <button class="w-full text-left flex justify-between items-center" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">What if my application is rejected?</span>
+                            <span class="material-icons">expand_more</span>
+                        </button>
+                        <div class="hidden">
+                            <p>If your Tamil Nadu scheme application is rejected, you will receive a notification explaining the reason. You can review the rejection reason and reapply if you think there was an error or if you can provide additional information.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SMART THITTAM</h3>
+                    <p>Empowering Tamil Nadu citizens with government scheme information and assistance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schemes.html">Schemes</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <div>
+                        <p>Email: support@smartthittam.gov.in</p>
+                        <p>Phone: 1800-XXX-XXXX</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="#">
+                            <span class="material-icons">facebook</span>
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">twitter</span>
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">youtube</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SMART THITTAM. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot -->
+    <div id="chatbot" class="chatbot-container">
+        <div class="chatbot-window">
+            <div class="chatbot-header">
+                <h3>SMART SCHEME AI Assistant</h3>
+                <button onclick="toggleChatbot()" class="chatbot-close">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div id="chat-messages" class="chatbot-messages">
+                <div class="message bot">
+                    <p>Hello! I'm your SMART SCHEME AI Assistant. I can help you with information about Tamil Nadu government schemes, eligibility criteria, application processes, and more. How can I assist you today?</p>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button onclick="sendMessage()">
+                    <span class="material-icons">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle" onclick="toggleChatbot()" class="chatbot-toggle">
+        <span class="material-icons">chat</span>
+    </button>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-4 left-4 z-50"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/api.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

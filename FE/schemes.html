@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schemes - SMART THITTAM</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header (Same as index.html) -->
+    <header>
+        <div class="logo-container">
+            <img src="assets/images/lionsymbol.png" alt="logo">
+            <h1>Tamil Nadu SMART SCHEME</h1>
+        </div>
+        <nav>
+            <a href="index.html">
+                <span class="material-icons">home</span>
+                <p>Home</p>
+            </a>
+            <a href="index.html#about">
+                <span class="material-icons">info</span>
+                <p>About</p>
+            </a>
+            <a href="schemes.html">
+                <span class="material-icons">description</span>
+                <p>Schemes</p>
+            </a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <span class="material-icons">menu</span>
+        </button>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu">
+            <a href="index.html">
+                <span class="material-icons">home</span>
+                Home
+            </a>
+            <a href="index.html#about">
+                <span class="material-icons">info</span>
+                About
+            </a>
+            <a href="schemes.html">
+                <span class="material-icons">description</span>
+                Schemes
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Page Header -->
+        <section class="hero">
+            <div class="container">
+                <h1>Government Schemes</h1>
+                <p>Discover and apply for government schemes available in Tamil Nadu</p>
+            </div>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-container">
+                    <div class="search-grid">
+                        <!-- Search Input -->
+                        <div class="col-span-2">
+                            <div class="form-group">
+                                <label>Search Schemes</label>
+                                <input type="text" id="search-input" placeholder="Search by scheme name, category, or keywords..." class="form-control">
+                            </div>
+                        </div>
+                        
+                        <!-- Category Filter -->
+                        <div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="category-filter" class="form-control">
+                                    <option value="">All Categories</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Women Empowerment">Women Empowerment</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Farmer Support">Farmer Support</option>
+                                    <option value="Student Support">Student Support</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- District Filter -->
+                        <div>
+                            <div class="form-group">
+                                <label>District</label>
+                                <select id="district-filter" class="form-control">
+                                    <option value="">All Districts</option>
+                                    <option value="Chennai">Chennai</option>
+                                    <option value="Coimbatore">Coimbatore</option>
+                                    <option value="Madurai">Madurai</option>
+                                    <option value="Salem">Salem</option>
+                                    <option value="Tiruchirappalli">Tiruchirappalli</option>
+                                    <option value="Vellore">Vellore</option>
+                                    <option value="Erode">Erode</option>
+                                    <option value="Tiruppur">Tiruppur</option>
+                                    <option value="Tirunelveli">Tirunelveli</option>
+                                    <option value="Thoothukkudi">Thoothukkudi</option>
+                                    <option value="Dindigul">Dindigul</option>
+                                    <option value="Thanjavur">Thanjavur</option>
+                                    <option value="Villupuram">Villupuram</option>
+                                    <option value="Kanchipuram">Kanchipuram</option>
+                                    <option value="Cuddalore">Cuddalore</option>
+                                    <option value="Pudukkottai">Pudukkottai</option>
+                                    <option value="Sivaganga">Sivaganga</option>
+                                    <option value="Ramanathapuram">Ramanathapuram</option>
+                                    <option value="Virudhunagar">Virudhunagar</option>
+                                    <option value="Karur">Karur</option>
+                                    <option value="Namakkal">Namakkal</option>
+                                    <option value="Theni">Theni</option>
+                                    <option value="Krishnagiri">Krishnagiri</option>
+                                    <option value="Dharmapuri">Dharmapuri</option>
+                                    <option value="Tiruvannamalai">Tiruvannamalai</option>
+                                    <option value="Ariyalur">Ariyalur</option>
+                                    <option value="Perambalur">Perambalur</option>
+                                    <option value="Nagapattinam">Nagapattinam</option>
+                                    <option value="Tiruvarur">Tiruvarur</option>
+                                    <option value="Nilgiris">Nilgiris</option>
+                                    <option value="Tenkasi">Tenkasi</option>
+                                    <option value="Chengalpattu">Chengalpattu</option>
+                                    <option value="Ranipet">Ranipet</option>
+                                    <option value="Tirupathur">Tirupathur</option>
+                                    <option value="Mayiladuthurai">Mayiladuthurai</option>
+                                    <option value="Kallakurichi">Kallakurichi</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Level Filter -->
+                        <div>
+                            <div class="form-group">
+                                <label>Level</label>
+                                <select id="level-filter" class="form-control">
+                                    <option value="">All Levels</option>
+                                    <option value="Central">Central</option>
+                                    <option value="State">State</option>
+                                    <option value="State/ UT">State/ UT</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Buttons -->
+                    <div class="flex justify-between items-center mt-4">
+                        <button onclick="applyFilters()" class="btn btn-primary">
+                            Apply Filters
+                        </button>
+                        <button onclick="clearFilters()" class="btn btn-secondary">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schemes List -->
+        <section class="section">
+            <div class="container">
+                <!-- Loading State -->
+                <div id="loading" class="loading hidden">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                    <p>Loading schemes...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="error" class="error hidden">
+                    <div class="text-red-600 mb-4">
+                        <span class="material-icons">error</span>
+                    </div>
+                    <h3>Failed to load schemes</h3>
+                    <p>Please try again later.</p>
+                    <button onclick="loadSchemes()" class="btn btn-primary">
+                        Try Again
+                    </button>
+                </div>
+
+                <!-- Schemes Grid -->
+                <div id="schemes-container" class="schemes-container">
+                    <!-- Schemes will be loaded here dynamically -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="pagination" class="pagination hidden">
+                    <button id="prev-page" onclick="changePage(-1)">
+                        Previous
+                    </button>
+                    <span id="page-info"></span>
+                    <button id="next-page" onclick="changePage(1)">
+                        Next
+                    </button>
+                </div>
+
+                <!-- No Results -->
+                <div id="no-results" class="text-center py-12 hidden">
+                    <div class="text-gray-400 mb-4">
+                        <span class="material-icons">search_off</span>
+                    </div>
+                    <h3>No schemes found</h3>
+                    <p>Try adjusting your search criteria or filters.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (Same as index.html) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SMART THITTAM</h3>
+                    <p>Empowering Tamil Nadu citizens with government scheme information and assistance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="schemes.html">Schemes</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <div>
+                        <p>Email: support@smartthittam.gov.in</p>
+                        <p>Phone: 1800-XXX-XXXX</p>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="#">
+                            <span class="material-icons">facebook</span>
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">twitter</span>
+                        </a>
+                        <a href="#">
+                            <span class="material-icons">youtube</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SMART THITTAM. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot (Same as index.html) -->
+    <div id="chatbot" class="chatbot-container">
+        <div class="chatbot-window">
+            <div class="chatbot-header">
+                <h3>SMART SCHEME AI Assistant</h3>
+                <button onclick="toggleChatbot()" class="chatbot-close">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div id="chat-messages" class="chatbot-messages">
+                <div class="message bot">
+                    <p>Hello! I'm your SMART SCHEME AI Assistant. I can help you with information about Tamil Nadu government schemes, eligibility criteria, application processes, and more. How can I assist you today?</p>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button onclick="sendMessage()">
+                    <span class="material-icons">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle" onclick="toggleChatbot()" class="chatbot-toggle">
+        <span class="material-icons">chat</span>
+    </button>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-4 left-4 z-50"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/api.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/schemes.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
