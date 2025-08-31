@@ -1,28 +1,16 @@
 BACKEND_SETUP_GUIDE.md
 PROJECT_DOCUMENTATION.md
-README.md
-BE\node_modules
-# Backend dependencies
+.gitignore  
 BE/node_modules/
+BE\config.env
+BE\README.md
+BE\utils\seedData..js
+BE\utils\addScheme.js
+BE\quick-start.bat
+BE\start-backend.bat
 
-# Environment variables
-BE/config.env
 
-# Local scripts
-BE/quick-start.bat
-BE/start-backend.bat
 
-# Logs and temp files
-BE/*.log
-BE/*.tmp
-BE/*.bak
 
-# Database files (if any)
-BE/data/
-BE/*.db
 
-# Ignore backup seed files
-BE/utils/seedData.bak.js
 
-# Ignore uploads (if any)
-BE/uploads/
