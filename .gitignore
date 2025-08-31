@@ -2,12 +2,12 @@ BACKEND_SETUP_GUIDE.md
 PROJECT_DOCUMENTATION.md
 .gitignore  
 BE/node_modules/
-BE\config.env
+BE/config.env
 BE\README.md
-BE\utils\seedData..js
-BE\utils\addScheme.js
-BE\quick-start.bat
-BE\start-backend.bat
+BE/utils/seedData..js
+BE/utils/addScheme.js
+BE/quick-start.bat
+BE/start-backend.bat
 
 
 
