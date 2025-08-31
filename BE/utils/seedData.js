@@ -1,8 +1,340 @@
+
 const mongoose = require('mongoose');
 const Scheme = require('../models/Scheme');
 require('dotenv').config({ path: './config.env' });
 
 const sampleSchemes = [
+    {
+        title: 'TN Student Transport Pass',
+        description: 'Free transport pass for students in Tamil Nadu. Currently not active.',
+        category: 'Transport',
+        eligibility: {
+            age: { min: 5, max: 25 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Student',
+            otherRequirements: ['Resident of Tamil Nadu']
+        },
+        benefits: ['Free bus pass', 'Discounted train fare'],
+        documents: ['Aadhaar Card', 'School/College ID'],
+        applicationProcess: 'Apply at local transport office.',
+        deadline: null,
+        status: 'Inactive',
+        governmentBody: 'TN Transport Department',
+        contactInfo: {
+            phone: '044-99887766',
+            email: 'transport@tn.gov.in',
+            website: 'https://tntransport.gov.in',
+            address: 'Salem, Tamil Nadu'
+        },
+        budget: { amount: 3000000, currency: 'INR' },
+        tags: ['Transport', 'Student', 'Tamil Nadu'],
+        district: 'Salem',
+        level: 'State',
+        featured: false,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'Central Farmer Insurance',
+        description: 'Insurance for farmers across India. Central government scheme.',
+        category: 'Farmer Support',
+        eligibility: {
+            age: { min: 18, max: 65 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Farmer',
+            otherRequirements: ['Must be a registered farmer']
+        },
+        benefits: ['Crop insurance', 'Disaster relief'],
+        documents: ['Aadhaar Card', 'Farmer ID'],
+        applicationProcess: 'Apply online or at agriculture office.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Ministry of Agriculture',
+        contactInfo: {
+            phone: '1800-222-333',
+            email: 'farmerinsurance@nic.in',
+            website: 'https://farmerinsurance.gov.in',
+            address: 'New Delhi'
+        },
+        budget: { amount: 8000000, currency: 'INR' },
+        tags: ['Farmer Support', 'Insurance', 'Central'],
+        district: 'All Districts',
+        level: 'Central',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'Madurai Student Scholarship',
+        description: 'Scholarship for students in Madurai district.',
+        category: 'Student Support',
+        eligibility: {
+            age: { min: 10, max: 22 },
+            income: { min: 0, max: 200000 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Student',
+            otherRequirements: ['Resident of Madurai']
+        },
+        benefits: ['Scholarship amount', 'Mentorship'],
+        documents: ['Aadhaar Card', 'School ID'],
+        applicationProcess: 'Apply at Madurai district office.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Madurai District Education Board',
+        contactInfo: {
+            phone: '0452-123456',
+            email: 'scholarship@madurai.tn.gov.in',
+            website: 'https://madurai.tn.gov.in',
+            address: 'Madurai, Tamil Nadu'
+        },
+        budget: { amount: 1000000, currency: 'INR' },
+        tags: ['Student Support', 'Madurai', 'Scholarship'],
+        district: 'Madurai',
+        level: 'State',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'Women Empowerment Central Grant',
+        description: 'Central grant for women entrepreneurs. Currently not active.',
+        category: 'Women Empowerment',
+        eligibility: {
+            age: { min: 18, max: 60 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Female',
+            location: 'Both',
+            occupation: 'Entrepreneur',
+            otherRequirements: ['Must be a woman entrepreneur']
+        },
+        benefits: ['Grant amount', 'Business training'],
+        documents: ['Aadhaar Card', 'Business Registration'],
+        applicationProcess: 'Apply online.',
+        deadline: null,
+        status: 'Inactive',
+        governmentBody: 'Ministry of Women & Child Development',
+        contactInfo: {
+            phone: '1800-555-666',
+            email: 'womenempowerment@nic.in',
+            website: 'https://wcd.nic.in',
+            address: 'New Delhi'
+        },
+        budget: { amount: 4000000, currency: 'INR' },
+        tags: ['Women Empowerment', 'Central', 'Entrepreneur'],
+        district: 'All Districts',
+        level: 'Central',
+        featured: false,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'State/UT Healthcare Scheme',
+        description: 'Healthcare scheme for all State/UTs. Active.',
+        category: 'Healthcare',
+        eligibility: {
+            age: { min: 0, max: 120 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Any',
+            otherRequirements: ['Resident of any State/UT']
+        },
+        benefits: ['Free medical checkup', 'Discounted medicines'],
+        documents: ['Aadhaar Card', 'State/UT ID'],
+        applicationProcess: 'Apply at local health center.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'State/UT Health Department',
+        contactInfo: {
+            phone: '1800-777-888',
+            email: 'health@stateut.gov.in',
+            website: 'https://stateuthealth.gov.in',
+            address: 'Chennai, Tamil Nadu'
+        },
+        budget: { amount: 6000000, currency: 'INR' },
+        tags: ['Healthcare', 'State/UT', 'Medical'],
+        district: 'Chennai',
+        level: 'State/UT',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'All Levels Technology Grant',
+        description: 'Technology grant available at all levels.',
+        category: 'Technology',
+        eligibility: {
+            age: { min: 18, max: 60 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Any',
+            otherRequirements: ['Interest in technology']
+        },
+        benefits: ['Grant amount', 'Tech training'],
+        documents: ['Aadhaar Card', 'Tech ID'],
+        applicationProcess: 'Apply online.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Ministry of Electronics & IT',
+        contactInfo: {
+            phone: '1800-999-000',
+            email: 'techgrant@meity.gov.in',
+            website: 'https://meity.gov.in',
+            address: 'Vellore, Tamil Nadu'
+        },
+        budget: { amount: 7000000, currency: 'INR' },
+        tags: ['Technology', 'Grant', 'All Levels'],
+        district: 'Vellore',
+        level: 'All Levels',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'State Housing Support',
+        description: 'Housing support for urban poor in Tamil Nadu. Currently not active.',
+        category: 'Housing',
+        eligibility: {
+            age: { min: 18, max: 65 },
+            income: { min: 0, max: 180000 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Urban',
+            occupation: 'Any',
+            otherRequirements: ['Resident of Tamil Nadu']
+        },
+        benefits: ['Subsidized housing', 'Interest subsidy'],
+        documents: ['Aadhaar Card', 'Income certificate'],
+        applicationProcess: 'Apply at municipal office.',
+        deadline: null,
+        status: 'Inactive',
+        governmentBody: 'TN Housing Board',
+        contactInfo: {
+            phone: '044-33445566',
+            email: 'housing@tn.gov.in',
+            website: 'https://tnhousing.gov.in',
+            address: 'Chennai, Tamil Nadu'
+        },
+        budget: { amount: 9000000, currency: 'INR' },
+        tags: ['Housing', 'Urban', 'Tamil Nadu'],
+        district: 'Chennai',
+        level: 'State',
+        featured: false,
+        views: 0,
+        applications: 0
+    },
+    // Tamil Nadu specific schemes
+    {
+        title: 'TN Free Education Scheme',
+        description: 'Provides free education for students in Tamil Nadu from primary to higher secondary.',
+        category: 'Education',
+        eligibility: {
+            age: { min: 5, max: 18 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Student',
+            otherRequirements: ['Resident of Tamil Nadu']
+        },
+        benefits: ['Free tuition', 'Free books'],
+        documents: ['Aadhaar Card', 'School ID'],
+        applicationProcess: 'Apply online through the official portal.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Tamil Nadu School Education Department',
+        contactInfo: {
+            phone: '044-12345678',
+            email: 'tn-edu@tn.gov.in',
+            website: 'https://tnschools.gov.in',
+            address: 'Chennai, Tamil Nadu'
+        },
+        budget: { amount: 10000000, currency: 'INR' },
+        tags: ['Education', 'Tamil Nadu', 'Student'],
+        district: 'Chennai',
+        level: 'State',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'TN Farmer Support Scheme',
+        description: 'Financial support for farmers in Tamil Nadu.',
+        category: 'Agriculture',
+        eligibility: {
+            age: { min: 18, max: 120 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Any',
+            location: 'Both',
+            occupation: 'Farmer',
+            otherRequirements: ['Resident of Tamil Nadu']
+        },
+        benefits: ['Direct cash transfer', 'Subsidized seeds'],
+        documents: ['Aadhaar Card', 'Land Ownership Proof'],
+        applicationProcess: 'Submit application at local agriculture office.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Tamil Nadu Agriculture Department',
+        contactInfo: {
+            phone: '044-87654321',
+            email: 'tn-agri@tn.gov.in',
+            website: 'https://tnagriculture.gov.in',
+            address: 'Coimbatore, Tamil Nadu'
+        },
+        budget: { amount: 5000000, currency: 'INR' },
+        tags: ['Agriculture', 'Tamil Nadu', 'Farmer'],
+        district: 'Coimbatore',
+        level: 'State',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
+    {
+        title: 'TN Women Empowerment Grant',
+        description: 'Grants for women entrepreneurs in Tamil Nadu.',
+        category: 'Women Empowerment',
+        eligibility: {
+            age: { min: 18, max: 60 },
+            income: { min: 0, max: 999999999 },
+            education: 'Any',
+            gender: 'Female',
+            location: 'Both',
+            occupation: 'Entrepreneur',
+            otherRequirements: ['Resident of Tamil Nadu']
+        },
+        benefits: ['Startup grant', 'Mentorship'],
+        documents: ['Aadhaar Card', 'Business Registration'],
+        applicationProcess: 'Apply through the Women Development Corporation.',
+        deadline: null,
+        status: 'Active',
+        governmentBody: 'Tamil Nadu Women Development Corporation',
+        contactInfo: {
+            phone: '044-11223344',
+            email: 'tn-women@tn.gov.in',
+            website: 'https://tnwdc.gov.in',
+            address: 'Madurai, Tamil Nadu'
+        },
+        budget: { amount: 2000000, currency: 'INR' },
+        tags: ['Women Empowerment', 'Tamil Nadu', 'Entrepreneur'],
+        district: 'Madurai',
+        level: 'State',
+        featured: true,
+        views: 0,
+        applications: 0
+    },
     {
         title: "PM Kisan Samman Nidhi",
         description: "Direct income support of ₹6,000 per year to eligible farmer families, payable in three equal installments of ₹2,000 each.",
@@ -43,7 +375,8 @@ const sampleSchemes = [
             currency: "INR"
         },
         tags: ["Agriculture", "Farmer", "Income Support", "PM Kisan"],
-        district: "All Districts",
+        district: "Madurai",
+        level: "Central",
         featured: true,
         views: 0,
         applications: 0
@@ -88,7 +421,8 @@ const sampleSchemes = [
             currency: "INR"
         },
         tags: ["Healthcare", "Insurance", "PMJAY", "Medical"],
-        district: "All Districts",
+        district: "Madurai",
+        level: "Central",
         featured: true,
         views: 0,
         applications: 0

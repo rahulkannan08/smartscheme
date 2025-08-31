@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Scheme = require('../models/Scheme');
-require('dotenv').config({ path: '../config.env' });
+require('dotenv').config({ path: './config.env' });
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -43,11 +43,10 @@ async function addNewScheme() {
                     "Should not be a government employee"
                 ]
             },
-            benefits: {
-                type: "Cash",
-                amount: 6000,
-                description: "Annual income support of Rs.6000 in three installments"
-            },
+            benefits: [
+                "Annual income support of Rs.6000 in three installments",
+                "Rs.2000 every four months"
+            ],
             documents: [
                 "Aadhar Card",
                 "Land Records",

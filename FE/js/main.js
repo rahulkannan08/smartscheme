@@ -1,9 +1,9 @@
 // Main JavaScript file for SMART THITTAM
 
 // Global variables
-let currentPage = 1;
-let totalPages = 1;
-let currentFilters = {};
+// Removed duplicate currentPage declaration (handled in schemes.js)
+// Removed duplicate totalPages declaration (handled in schemes.js)
+// Removed duplicate currentFilters declaration (handled in schemes.js)
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {

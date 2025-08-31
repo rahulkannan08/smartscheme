@@ -80,33 +80,39 @@ async function applyFilters() {
         const categoryValue = document.getElementById('category-filter').value;
         const districtValue = document.getElementById('district-filter').value;
         const levelValue = document.getElementById('level-filter').value;
-        
-        // Build filters object
+
+        // Build filters object (match backend keys)
         currentFilters = {};
         if (searchValue) currentFilters.search = searchValue;
         if (categoryValue) currentFilters.category = categoryValue;
         if (districtValue) currentFilters.district = districtValue;
         if (levelValue) currentFilters.level = levelValue;
-        
-        // Fetch schemes
-        const response = await window.API.schemes.getFilteredSchemes(currentFilters, currentPage, 9);
-        
-        // Update global variables
-        schemesData = response.schemes || [];
-        totalPages = response.totalPages || 1;
-        totalSchemes = response.totalSchemes || 0;
-        
+
+        // If no filters, fetch all schemes
+        const isNoFilter = !searchValue && !categoryValue && !districtValue && !levelValue;
+        let response;
+        if (isNoFilter) {
+            response = await window.API.schemes.getFilteredSchemes({}, currentPage, 9);
+        } else {
+            response = await window.API.schemes.getFilteredSchemes(currentFilters, currentPage, 9);
+        }
+
+        // Update global variables (match backend response)
+        schemesData = (response.data && response.data.schemes) ? response.data.schemes : [];
+        totalPages = (response.data && response.data.pagination && response.data.pagination.totalPages) ? response.data.pagination.totalPages : 1;
+        totalSchemes = (response.data && response.data.pagination && response.data.pagination.totalSchemes) ? response.data.pagination.totalSchemes : 0;
+
         // Render schemes
         renderSchemes();
         renderPagination();
-        
+
         hideLoading();
-        
+
         // Show no results if no schemes found
         if (schemesData.length === 0) {
             showNoResults();
         }
-        
+
     } catch (error) {
         showError();
         console.error('Error applying filters:', error);
@@ -141,16 +147,16 @@ function renderSchemes() {
 
 // Create scheme card HTML
 function createSchemeCard(scheme) {
-    const category = scheme.schemeCategory && scheme.schemeCategory[0] ? scheme.schemeCategory[0] : 'General';
+    const category = scheme.category ? scheme.category : 'General';
     const categoryColor = window.SMART_THITTAM.getCategoryColor(category);
-    const description = window.SMART_THITTAM.formatText(scheme.detailedDescription_md || scheme.schemeShortTitle, 120);
+    const description = window.SMART_THITTAM.formatText(scheme.description, 120);
     
     return `
         <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="viewSchemeDetails('${scheme._id}')">
             <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div class="flex-1">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${scheme.schemeName}</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${scheme.title}</h3>
                         <p class="text-gray-600 text-sm mb-3">${description}</p>
                     </div>
                 </div>
@@ -160,14 +166,14 @@ function createSchemeCard(scheme) {
                         ${category}
                     </span>
                     <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium">
-                        ${scheme.level || 'N/A'}
+                        ${scheme.district || 'N/A'}
                     </span>
                 </div>
                 
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-500">
                         <span class="material-icons text-sm mr-1">location_on</span>
-                        ${scheme.state || 'Tamil Nadu'}
+                        Tamil Nadu
                     </span>
                     <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
                         View Details
@@ -248,6 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (searchInput) {
         searchInput.addEventListener('input', searchSchemes);
     }
+    // Load all schemes by default on page load
+    window.schemesFunctions.loadSchemes();
 });
 
 // Export functions for global access
