@@ -1,14 +1,15 @@
+require('dotenv').config(); // Loads .env by default
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config({ path: './config.env' });
 
 // Import routes
 const schemesRoutes = require('./routes/schemes');
-const chatbotRoutes = require('./routes/chatbot');
+const geminiKeyRoute = require('./api-gemini-key');
+
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -18,7 +19,12 @@ app.use(helmet());
 
 // CORS configuration
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000', 'http://127.0.0.1:5500'],
+    origin: [
+        'http://localhost:3000',
+        'http://127.0.0.1:5500',
+        'http://localhost:5001',
+        'file://'
+    ],
     credentials: true,
     optionsSuccessStatus: 200
 };
@@ -40,7 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // MongoDB Connection
@@ -72,7 +78,8 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.use('/api/v2/schemes', schemesRoutes);
-app.use('/api/v1/ai-chatbot', chatbotRoutes);
+app.use(geminiKeyRoute);
+
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -103,4 +110,7 @@ process.on('unhandledRejection', (err, promise) => {
     console.log(`Error: ${err.message}`);
     // Close server & exit process
     process.exit(1);
-}); 
+});
+
+// No changes needed. This is your main backend file.
+// Make sure your `/api/get-gemini-key` route is defined in `api-gemini-key.js` and imported/used here.
