@@ -284,41 +284,14 @@
         </div>
     </footer>
 
-    <!-- AI Chatbot -->
-    <div id="chatbot" class="chatbot-container">
-        <div class="chatbot-window">
-            <div class="chatbot-header">
-                <h3>SMART SCHEME AI Assistant</h3>
-                <button onclick="toggleChatbot()" class="chatbot-close">
-                    <span class="material-icons">close</span>
-                </button>
-            </div>
-            <div id="chat-messages" class="chatbot-messages">
-                <div class="message bot">
-                    <p>Hello! I'm your SMART SCHEME AI Assistant. I can help you with information about Tamil Nadu government schemes, eligibility criteria, application processes, and more. How can I assist you today?</p>
-                </div>
-            </div>
-            <div class="chatbot-input">
-                <input type="text" id="chat-input" placeholder="Type your message...">
-                <button onclick="sendMessage()">
-                    <span class="material-icons">send</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chatbot Toggle Button -->
-    <button id="chatbot-toggle" onclick="toggleChatbot()" class="chatbot-toggle">
-        <span class="material-icons">chat</span>
-    </button>
-
-    <!-- Toast Notifications -->
-    <div id="toast-container" class="fixed bottom-4 left-4 z-50"></div>
-
     <!-- JavaScript Files -->
     <script src="js/api.js"></script>
-    <script src="js/chatbot.js"></script>
-    <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/chatbot-ui.js"></script>
+    <script>
+        document.getElementById('chatbot-btn').addEventListener('click', function() {
+            if (window.openChatbotWindow) window.openChatbotWindow();
+        });
+    </script>
 </body>
-</html> 
+</html>

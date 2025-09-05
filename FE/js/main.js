@@ -52,13 +52,7 @@ function setupEventListeners() {
         });
     }
     
-    // Chatbot button event listener
-    const chatbotBtn = document.getElementById('chatbot-btn');
-    if (chatbotBtn) {
-        chatbotBtn.addEventListener('click', function() {
-            toggleChatbot();
-        });
-    }
+    
 }
 
 // FAQ Toggle functionality

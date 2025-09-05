@@ -266,4 +266,4 @@ window.schemesFunctions = {
     changePage,
     viewSchemeDetails,
     searchSchemes
-}; 
+};

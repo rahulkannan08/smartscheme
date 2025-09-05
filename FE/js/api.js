@@ -91,17 +91,79 @@ const schemesAPI = {
 
 // Chatbot API Functions
 const chatbotAPI = {
-    // Send message to AI chatbot
+    // Send message to Gemini AI chatbot securely
     async sendMessage(message) {
+        // Fetch Gemini API key from backend
+        let apiKey = '';
         try {
-            const response = await apiRequest('/v1/ai-chatbot/chat', {
-                method: 'POST',
-                body: JSON.stringify({ prompt: message })
-            });
-            return response;
-        } catch (error) {
-            throw new Error('Failed to get chatbot response');
+            // Always use full backend URL
+            const res = await fetch('http://localhost:5001/api/get-gemini-key');
+            const data = await res.json();
+            apiKey = data.key;
+        } catch (err) {
+            return { reply: "Error: Unable to fetch Gemini API key." };
         }
+        if (!apiKey) {
+            return { reply: "Error: Gemini API key not configured." };
+        }
+
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+        const payload = {
+            contents: [{
+                parts: [{
+                    text: message
+                }]
+            }]
+        };
+
+        const systemPrompt = "You are a helpful and friendly chatbot. You provide concise and useful answers.";
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...payload,
+                systemInstruction: {
+                    parts: [{
+                        text: systemPrompt
+                    }]
+                }
+            })
+        };
+
+        let responseText = '';
+        let retries = 0;
+        const maxRetries = 3;
+        const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+        while (retries < maxRetries) {
+            try {
+                const response = await fetch(apiUrl, requestOptions);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error.message}`);
+                }
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    responseText = candidate.content.parts[0].text;
+                    break;
+                } else {
+                    throw new Error("Invalid API response format.");
+                }
+            } catch (error) {
+                retries++;
+                if (retries < maxRetries) {
+                    await delay(1000 * Math.pow(2, retries - 1));
+                } else {
+                    responseText = "Failed to get a response from the chatbot. Please try again later.";
+                }
+            }
+        }
+        return { reply: responseText };
     }
 };
 
@@ -145,4 +207,5 @@ function handleAPISuccess(data, message = 'Operation successful') {
         data: data,
         message: message
     };
-} 
+}
+
