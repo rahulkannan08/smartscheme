@@ -169,6 +169,16 @@ const schemeSchema = new mongoose.Schema({
     applications: {
         type: Number,
         default: 0
+    },
+    apply: {
+        how: {
+            type: String,
+            required: [true, 'Application method is required']
+        },
+        site: {
+            type: String,
+            required: [true, 'Application site is required']
+        }
     }
 }, {
     timestamps: true,
@@ -219,4 +229,4 @@ schemeSchema.pre('save', function(next) {
     next();
 });
 
-module.exports = mongoose.model('Scheme', schemeSchema); 
+module.exports = mongoose.model('Scheme', schemeSchema);

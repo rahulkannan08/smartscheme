@@ -175,9 +175,9 @@ function createSchemeCard(scheme) {
                         <span class="material-icons text-sm mr-1">location_on</span>
                         Tamil Nadu
                     </span>
-                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                    <a href="scheme-details.html?id=${scheme._id}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
                         View Details
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -233,9 +233,8 @@ async function changePage(direction) {
 
 // View scheme details
 function viewSchemeDetails(schemeId) {
-    // Store scheme ID in localStorage for the details page
-    localStorage.setItem('selectedSchemeId', schemeId);
-    window.location.href = 'scheme-details.html';
+    // Navigate to scheme-details.html with scheme ID in URL
+    window.location.href = `scheme-details.html?id=${schemeId}`;
 }
 
 // Search schemes (debounced)

@@ -144,34 +144,13 @@ router.get('/get-filtered-schemes', [
 // Get scheme by ID
 router.get('/get-scheme-by-id/:id', async (req, res) => {
     try {
-        const scheme = await Scheme.findById(req.params.id).select('-__v');
-        
+        const scheme = await Scheme.findById(req.params.id);
         if (!scheme) {
-            return res.status(404).json({
-                success: false,
-                message: 'Scheme not found'
-            });
+            return res.status(404).json({ message: 'Scheme not found' });
         }
-
-        // Increment views
-        await Scheme.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
-
-        res.status(200).json({
-            success: true,
-            data: scheme
-        });
+        res.json(scheme);
     } catch (error) {
-        console.error('Error fetching scheme:', error);
-        if (error.kind === 'ObjectId') {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid scheme ID'
-            });
-        }
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
@@ -444,4 +423,4 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-module.exports = router; 
+module.exports = router;

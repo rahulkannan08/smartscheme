@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scheme Details</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <!-- ...existing header code... -->
+    </header>
+    <main>
+        <div id="scheme-details-container">
+            <h1 id="scheme-title">Loading...</h1>
+            <p id="scheme-description"></p>
+            <!-- Add more fields as needed -->
+            <div id="apply-section"></div>
+        </div>
+    </main>
+    <footer>
+        <!-- ...existing footer code... -->
+    </footer>
+    <script src="js/api.js"></script>
+    <script>
+        // Get scheme ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const schemeId = urlParams.get('id');
+
+        if (schemeId) {
+            window.API.schemes.getSchemeById(schemeId)
+                .then(data => {
+                    document.getElementById('scheme-title').textContent = data.title || 'Scheme Details';
+
+                    let detailsHtml = '';
+                    if (data.description) {
+                        detailsHtml += `<p>${data.description}</p>`;
+                    }
+                    if (data.category) {
+                        detailsHtml += `<p><strong>Category:</strong> ${data.category}</p>`;
+                    }
+                    if (data.eligibility) {
+                        detailsHtml += `<p><strong>Eligibility:</strong> ${data.eligibility}</p>`;
+                    }
+                    if (data.benefits) {
+                        detailsHtml += `<p><strong>Benefits:</strong> ${data.benefits}</p>`;
+                    }
+                    if (data.district) {
+                        detailsHtml += `<p><strong>District:</strong> ${data.district}</p>`;
+                    }
+                    document.getElementById('scheme-description').innerHTML = detailsHtml;
+
+                    // Apply section
+                    let applyHtml = '';
+                    if (data.apply) {
+                        if (data.apply.how) {
+                            applyHtml += `<p><strong>How to Apply:</strong> ${data.apply.how}</p>`;
+                        }
+                        if (data.apply.site) {
+                            applyHtml += `<p><strong>Where to Apply:</strong> <a href="${data.apply.site}" target="_blank">${data.apply.site}</a></p>`;
+                        }
+                    }
+                    document.getElementById('apply-section').innerHTML = applyHtml;
+
+                })
+                .catch(err => {
+                    document.getElementById('scheme-title').textContent = 'Error loading scheme';
+                    document.getElementById('scheme-description').textContent = err.message;
+                    document.getElementById('apply-section').textContent = '';
+                });
+        } else {
+            document.getElementById('scheme-title').textContent = 'No scheme selected';
+            document.getElementById('scheme-description').innerHTML =
+                'Please select a scheme from the schemes list to view details.<br>' +
+                '<small>Tip: Open this page with a valid scheme ID, e.g. <code>scheme-details.html?id=SCHEME_ID</code></small>';
+            document.getElementById('apply-section').textContent = '';
+        }
+    </script>
+</body>
+</html>
