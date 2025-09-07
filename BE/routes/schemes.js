@@ -16,6 +16,62 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
+/**
+ * @swagger
+ * /api/v2/schemes/get-all-schemes:
+ *   get:
+ *     summary: Get all schemes with pagination
+ *     tags: [Schemes]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *         description: Number of schemes per page
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved schemes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     schemes:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Scheme'
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         currentPage:
+ *                           type: integer
+ *                         totalPages:
+ *                           type: integer
+ *                         totalSchemes:
+ *                           type: integer
+ *                         hasNextPage:
+ *                           type: boolean
+ *                         hasPrevPage:
+ *                           type: boolean
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
 // Get all schemes with pagination
 router.get('/get-all-schemes', [
     query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
@@ -58,6 +114,79 @@ router.get('/get-all-schemes', [
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/get-filtered-schemes:
+ *   get:
+ *     summary: Get schemes with filters
+ *     tags: [Schemes]
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filter by category
+ *       - in: query
+ *         name: age
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           maximum: 120
+ *         description: Filter by age
+ *       - in: query
+ *         name: income
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Filter by income
+ *       - in: query
+ *         name: education
+ *         schema:
+ *           type: string
+ *         description: Filter by education level
+ *       - in: query
+ *         name: gender
+ *         schema:
+ *           type: string
+ *           enum: [Male, Female, Any]
+ *         description: Filter by gender
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *           enum: [Rural, Urban, Both]
+ *         description: Filter by location
+ *       - in: query
+ *         name: district
+ *         schema:
+ *           type: string
+ *         description: Filter by district
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved filtered schemes
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
 // Get filtered schemes
 router.get('/get-filtered-schemes', [
     query('category').optional().isString(),
@@ -141,6 +270,31 @@ router.get('/get-filtered-schemes', [
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/get-scheme-by-id/{id}:
+ *   get:
+ *     summary: Get scheme by ID
+ *     tags: [Schemes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Scheme ID
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved scheme
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Scheme'
+ *       404:
+ *         description: Scheme not found
+ *       500:
+ *         description: Internal server error
+ */
 // Get scheme by ID
 router.get('/get-scheme-by-id/:id', async (req, res) => {
     try {
@@ -154,6 +308,38 @@ router.get('/get-scheme-by-id/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/get-scheme-by-category/{category}:
+ *   get:
+ *     summary: Get schemes by category
+ *     tags: [Schemes]
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Scheme category
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved schemes by category
+ *       500:
+ *         description: Internal server error
+ */
 // Get schemes by category
 router.get('/get-scheme-by-category/:category', [
     query('page').optional().isInt({ min: 1 }),
@@ -204,6 +390,30 @@ router.get('/get-scheme-by-category/:category', [
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/featured:
+ *   get:
+ *     summary: Get featured schemes
+ *     tags: [Schemes]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved featured schemes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Scheme'
+ *       500:
+ *         description: Internal server error
+ */
 // Get featured schemes
 router.get('/featured', async (req, res) => {
     try {
@@ -228,6 +438,35 @@ router.get('/featured', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/categories:
+ *   get:
+ *     summary: Get all scheme categories
+ *     tags: [Schemes]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       category:
+ *                         type: string
+ *                       count:
+ *                         type: integer
+ *       500:
+ *         description: Internal server error
+ */
 // Get scheme categories
 router.get('/categories', async (req, res) => {
     try {
@@ -256,6 +495,35 @@ router.get('/categories', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/districts:
+ *   get:
+ *     summary: Get all scheme districts
+ *     tags: [Schemes]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved districts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       district:
+ *                         type: string
+ *                       count:
+ *                         type: integer
+ *       500:
+ *         description: Internal server error
+ */
 // Get scheme districts
 router.get('/districts', async (req, res) => {
     try {
@@ -284,6 +552,40 @@ router.get('/districts', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/search:
+ *   get:
+ *     summary: Search schemes
+ *     tags: [Schemes]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search query
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *         description: Items per page
+ *     responses:
+ *       200:
+ *         description: Successfully searched schemes
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
 // Search schemes
 router.get('/search', [
     query('q').notEmpty().withMessage('Search query is required'),
@@ -334,6 +636,74 @@ router.get('/search', [
 });
 
 // Admin routes (protected)
+/**
+ * @swagger
+ * /api/v2/schemes/create:
+ *   post:
+ *     summary: Create a new scheme
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - description
+ *               - category
+ *               - benefits
+ *               - documents
+ *               - applicationProcess
+ *               - governmentBody
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Pradhan Mantri Kisan Samman Nidhi"
+ *               description:
+ *                 type: string
+ *                 example: "Income support scheme for farmers"
+ *               category:
+ *                 type: string
+ *                 enum: [Agriculture, Education, Healthcare, Employment, Housing, Women Empowerment, Youth Development, Senior Citizens, Disability, Financial Inclusion, Technology, Environment, Rural Development, Urban Development, Other]
+ *                 example: "Agriculture"
+ *               benefits:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["₹6,000 per year", "Direct benefit transfer"]
+ *               documents:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Land ownership documents", "Bank account details"]
+ *               applicationProcess:
+ *                 type: string
+ *                 example: "Apply online through PM-KISAN portal"
+ *               governmentBody:
+ *                 type: string
+ *                 example: "Ministry of Agriculture & Farmers Welfare"
+ *     responses:
+ *       201:
+ *         description: Scheme created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Scheme created successfully"
+ *                 data:
+ *                   $ref: '#/components/schemas/Scheme'
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
 // Create new scheme
 router.post('/create', [
     body('title').notEmpty().withMessage('Title is required'),
@@ -368,6 +738,57 @@ router.post('/create', [
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/update/{id}:
+ *   put:
+ *     summary: Update a scheme
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Scheme ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               benefits:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               documents:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               applicationProcess:
+ *                 type: string
+ *               governmentBody:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [Active, Inactive]
+ *               featured:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Scheme updated successfully
+ *       404:
+ *         description: Scheme not found
+ *       500:
+ *         description: Internal server error
+ */
 // Update scheme
 router.put('/update/:id', async (req, res) => {
     try {
@@ -398,6 +819,27 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/v2/schemes/delete/{id}:
+ *   delete:
+ *     summary: Delete a scheme
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Scheme ID
+ *     responses:
+ *       200:
+ *         description: Scheme deleted successfully
+ *       404:
+ *         description: Scheme not found
+ *       500:
+ *         description: Internal server error
+ */
 // Delete scheme
 router.delete('/delete/:id', async (req, res) => {
     try {

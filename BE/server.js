@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 
 // Import routes
 const schemesRoutes = require('./routes/schemes');
@@ -49,22 +51,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// MongoDB Connection
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
-    }
-};
-
-// Connect to MongoDB
-connectDB();
+// Database connection will be handled by individual routes/models
+// Use the seed data utility to populate database: node utils/seedData.js
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -75,6 +63,12 @@ app.get('/api/health', (req, res) => {
         environment: process.env.NODE_ENV
     });
 });
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Smart Scheme API Documentation'
+}));
 
 // API Routes
 app.use('/api/v2/schemes', schemesRoutes);
