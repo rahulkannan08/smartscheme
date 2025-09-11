@@ -233,7 +233,12 @@ async function changePage(direction) {
 
 // View scheme details
 function viewSchemeDetails(schemeId) {
-    // Navigate to scheme-details.html with scheme ID in URL
+    const user = localStorage.getItem('user');
+    if (!user) {
+        alert('Please login or register to view scheme details.');
+        window.location.href = 'login.html';
+        return;
+    }
     window.location.href = `scheme-details.html?id=${schemeId}`;
 }
 

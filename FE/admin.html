@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - SMART THITTAM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h2>Admin Panel</h2>
+    <div>
+        <h3>Add Scheme</h3>
+        <form id="addSchemeForm">
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="text" name="category" placeholder="Category" required>
+            <select name="district" required>
+                <option value="All Districts">All Districts</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Coimbatore">Coimbatore</option>
+                <option value="Madurai">Madurai</option>
+                <option value="Salem">Salem</option>
+                <option value="Tiruchirappalli">Tiruchirappalli</option>
+                <option value="Vellore">Vellore</option>
+                <option value="Erode">Erode</option>
+                <option value="Tiruppur">Tiruppur</option>
+                <option value="Tirunelveli">Tirunelveli</option>
+                <option value="Thoothukkudi">Thoothukkudi</option>
+                <option value="Dindigul">Dindigul</option>
+                <option value="Thanjavur">Thanjavur</option>
+                <option value="Villupuram">Villupuram</option>
+                <option value="Kanchipuram">Kanchipuram</option>
+                <option value="Cuddalore">Cuddalore</option>
+                <option value="Pudukkottai">Pudukkottai</option>
+                <option value="Sivaganga">Sivaganga</option>
+                <option value="Ramanathapuram">Ramanathapuram</option>
+                <option value="Virudhunagar">Virudhunagar</option>
+                <option value="Karur">Karur</option>
+                <option value="Namakkal">Namakkal</option>
+                <option value="Theni">Theni</option>
+                <option value="Krishnagiri">Krishnagiri</option>
+                <option value="Dharmapuri">Dharmapuri</option>
+                <option value="Tiruvannamalai">Tiruvannamalai</option>
+                <option value="Ariyalur">Ariyalur</option>
+                <option value="Perambalur">Perambalur</option>
+                <option value="Nagapattinam">Nagapattinam</option>
+                <option value="Tiruvarur">Tiruvarur</option>
+                <option value="Nilgiris">Nilgiris</option>
+                <option value="Tenkasi">Tenkasi</option>
+                <option value="Chengalpattu">Chengalpattu</option>
+                <option value="Ranipet">Ranipet</option>
+                <option value="Tirupathur">Tirupathur</option>
+                <option value="Mayiladuthurai">Mayiladuthurai</option>
+                <option value="Kallakurichi">Kallakurichi</option>
+            </select>
+            <input type="number" name="minAge" placeholder="Min Age" required>
+            <input type="number" name="maxAge" placeholder="Max Age" required>
+            <button type="submit">Add Scheme</button>
+        </form>
+    </div>
+    <div>
+        
+        <h3>Edit/Delete Scheme</h3>
+        <input type="text" id="schemeId" placeholder="Scheme ID">
+        <button onclick="editScheme()">Edit</button>
+        <button onclick="deleteScheme()">Delete</button>
+    </div>
+    <script>
+    // Add Scheme
+    document.getElementById('addSchemeForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.role !== 'admin') {
+            alert('Only admin can add schemes!');
+            return;
+        }
+        const token = user?.token; // Get token from user object
+        const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Add this line
+            },
+            body: JSON.stringify({
+                title: form.title.value,
+                description: form.description.value,
+                category: form.category.value,
+                district: form.district.value,
+                eligibility: {
+                    age: { min: form.minAge.value, max: form.maxAge.value }
+                },
+                status: 'Active'
+            })
+        });
+        const result = await res.json();
+        alert(result.message);
+    };
+
+    // Edit Scheme
+    async function editScheme() {
+        const schemeId = document.getElementById('schemeId').value;
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = user?.token;
+        const newTitle = prompt('Enter new title:');
+        if (!schemeId || !newTitle) return;
+        const res = await fetch(`http://localhost:5001/api/v2/schemes/update/${schemeId}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Add this line
+            },
+            body: JSON.stringify({ title: newTitle })
+        });
+        const result = await res.json();
+        alert(result.message);
+    }
+
+    // Delete Scheme
+    async function deleteScheme() {
+        const schemeId = document.getElementById('schemeId').value;
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = user?.token;
+        if (!schemeId) return;
+        const res = await fetch(`http://localhost:5001/api/v2/schemes/delete/${schemeId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}` // Add this line
+            }
+        });
+        const result = await res.json();
+        alert(result.message);
+    }
+    </script>
+</body>
+</html>

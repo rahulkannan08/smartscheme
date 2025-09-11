@@ -22,6 +22,13 @@
     </footer>
     <script src="js/api.js"></script>
     <script>
+        // Check user authentication
+        const user = localStorage.getItem('user');
+        if (!user) {
+            alert('Please login or register to view scheme details.');
+            window.location.href = 'login.html';
+        }
+
         // Get scheme ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const schemeId = urlParams.get('id');

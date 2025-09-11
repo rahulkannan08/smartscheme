@@ -59,6 +59,11 @@
                 Schemes
             </a>
         </div>
+
+        <!-- Authentication Buttons -->
+        <div class="auth-buttons" id="auth-buttons" style="position:absolute;top:24px;right:24px;display:flex;gap:12px;">
+    <!-- Buttons will be rendered by JS -->
+</div>
     </header>
 
     <!-- Main Content -->
@@ -274,7 +279,44 @@
             </div>
         </div>
     </footer>
+    <script>
+function renderAuthButtons() {
+    const authDiv = document.getElementById('auth-buttons');
+    authDiv.innerHTML = '';
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        // Show user profile
+        const profileBtn = document.createElement('a');
+        profileBtn.href = 'profile.html';
+        profileBtn.className = 'btn btn-secondary';
+        profileBtn.textContent = user.name;
+        authDiv.appendChild(profileBtn);
 
+        const logoutBtn = document.createElement('button');
+        logoutBtn.className = 'btn btn-primary';
+        logoutBtn.textContent = 'Logout';
+        logoutBtn.onclick = function() {
+            localStorage.removeItem('user');
+            window.location.reload();
+        };
+        authDiv.appendChild(logoutBtn);
+    } else {
+        // Show login/register
+        const loginBtn = document.createElement('a');
+        loginBtn.href = 'login.html';
+        loginBtn.className = 'btn btn-secondary';
+        loginBtn.textContent = 'Login';
+        authDiv.appendChild(loginBtn);
+
+        const registerBtn = document.createElement('a');
+        registerBtn.href = 'register.html';
+        registerBtn.className = 'btn btn-primary';
+        registerBtn.textContent = 'Register';
+        authDiv.appendChild(registerBtn);
+    }
+}
+renderAuthButtons();
+</script>
     <!-- JavaScript Files -->
     <script src="js/api.js"></script>
     <script src="js/main.js"></script>

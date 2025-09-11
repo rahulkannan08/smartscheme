@@ -6,12 +6,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true
-    },
     password: {
         type: String,
         required: true
@@ -24,6 +18,14 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    age: {
+        type: Number,
+        required: true
+    },
+    district: {
+        type: String,
+        required: true
     }
 });
 

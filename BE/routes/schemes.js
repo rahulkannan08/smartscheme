@@ -16,6 +16,12 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
+function requireAdmin(req, res, next) {
+    // For demo: get user role from request body (in production, use session/JWT)
+    if (req.body && req.body.role === 'admin') return next();
+    res.status(403).json({ success: false, message: 'Not authorized' });
+}
+
 /**
  * @swagger
  * /api/v2/schemes/get-all-schemes:
@@ -705,7 +711,7 @@ router.get('/search', [
  *         description: Internal server error
  */
 // Create new scheme
-router.post('/create', [
+router.post('/create', requireAdmin, [
     body('title').notEmpty().withMessage('Title is required'),
     body('description').notEmpty().withMessage('Description is required'),
     body('category').isIn([
@@ -718,6 +724,9 @@ router.post('/create', [
     body('documents').isArray({ min: 1 }).withMessage('At least one document is required'),
     body('applicationProcess').notEmpty().withMessage('Application process is required'),
     body('governmentBody').notEmpty().withMessage('Government body is required'),
+    body('apply').isObject().withMessage('Apply field is required'),
+    body('apply.how').notEmpty().withMessage('Application method is required'),
+    body('apply.site').notEmpty().withMessage('Application site is required'),
     handleValidationErrors
 ], async (req, res) => {
     try {
@@ -790,7 +799,7 @@ router.post('/create', [
  *         description: Internal server error
  */
 // Update scheme
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', requireAdmin, async (req, res) => {
     try {
         const scheme = await Scheme.findByIdAndUpdate(
             req.params.id,
@@ -841,7 +850,7 @@ router.put('/update/:id', async (req, res) => {
  *         description: Internal server error
  */
 // Delete scheme
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', requireAdmin, async (req, res) => {
     try {
         const scheme = await Scheme.findByIdAndDelete(req.params.id);
 

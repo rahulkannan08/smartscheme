@@ -11,6 +11,7 @@ const swaggerSpecs = require('./config/swagger');
 // Import routes
 const schemesRoutes = require('./routes/schemes');
 const geminiKeyRoute = require('./api-gemini-key');
+const authRoutes = require('./routes/auth');
 
 
 const app = express();
@@ -51,8 +52,22 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Database connection will be handled by individual routes/models
-// Use the seed data utility to populate database: node utils/seedData.js
+// MongoDB Connection
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        process.exit(1);
+    }
+};
+
+// Connect to MongoDB
+connectDB();
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -73,6 +88,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
 // API Routes
 app.use('/api/v2/schemes', schemesRoutes);
 app.use(geminiKeyRoute);
+app.use('/api/auth', authRoutes);
 
 
 // 404 handler

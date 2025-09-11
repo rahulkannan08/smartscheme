@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile - SMART THITTAM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h2>User Profile</h2>
+    <div id="profile-container"></div>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('profile-container').innerHTML = `
+                <p><strong>Name:</strong> ${user.name}</p>
+                <p><strong>Role:</strong> ${user.role}</p>
+                <p><strong>District:</strong> ${user.district}</p>
+                <p><strong>Age:</strong> ${user.age}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
