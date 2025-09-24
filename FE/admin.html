@@ -10,10 +10,10 @@
     <div>
         <h3>Add Scheme</h3>
         <form id="addSchemeForm">
-            <input type="text" name="title" placeholder="Title" required>
-            <input type="text" name="description" placeholder="Description" required>
-            <input type="text" name="category" placeholder="Category" required>
-            <select name="district" required>
+            <input type="text" id="name" name="name" placeholder="Title" required>
+            <input type="text" id="description" name="description" placeholder="Description" required>
+            <input type="text" id="category" name="category" placeholder="Category" required>
+            <select id="district" name="district" required>
                 <option value="All Districts">All Districts</option>
                 <option value="Chennai">Chennai</option>
                 <option value="Coimbatore">Coimbatore</option>
@@ -52,6 +52,7 @@
                 <option value="Mayiladuthurai">Mayiladuthurai</option>
                 <option value="Kallakurichi">Kallakurichi</option>
             </select>
+            <input type="number" id="amount" name="amount" placeholder="Amount" required>
             <input type="number" name="minAge" placeholder="Min Age" required>
             <input type="number" name="maxAge" placeholder="Max Age" required>
             <button type="submit">Add Scheme</button>
@@ -72,29 +73,32 @@ if (!user || user.role !== 'admin') {
 }
 
 // Add Scheme
-document.getElementById('addSchemeForm').onsubmit = async function(e) {
+document.getElementById('addSchemeForm').onsubmit = async (e) => {
     e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.token;
+    if (!token) {
+        alert('You must be logged in as admin.');
+        return;
+    }
     const form = e.target;
-    const token = user?.token; // Get token from user object
+const formData = {
+    name: form.elements['name'].value,
+    category: form.elements['category'].value,
+    district: form.elements['district'].value,
+    amount: form.elements['amount'].value,
+    // etc.
+};
     const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
         method: 'POST',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Add this line
+            'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-            title: form.title.value,
-            description: form.description.value,
-            category: form.category.value,
-            district: form.district.value,
-            eligibility: {
-                age: { min: form.minAge.value, max: form.maxAge.value }
-            },
-            status: 'Active'
-        })
+        body: JSON.stringify(formData)
     });
     const result = await res.json();
-    alert(result.message);
+    alert(result.message || 'Failed to add scheme');
 };
 
 // Edit Scheme

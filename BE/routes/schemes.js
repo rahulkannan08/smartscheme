@@ -19,20 +19,21 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'No token provided' });
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (user && user.role === 'admin') {
-      req.user = user;
-      next();
-    } else {
-      res.status(403).json({ error: 'Not authorized' });
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        if (user && user.role === 'admin') {
+            req.user = user;
+            next();
+        } else {
+            res.status(403).json({ message: 'Not authorized' });
+        }
+    } catch (err) {
+        res.status(401).json({ message: 'Invalid token' });
     }
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
-  }
 }
 
 /**
@@ -651,6 +652,41 @@ router.get('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch schemes' });
   }
+});
+
+/**
+ * @swagger
+ * /api/v2/schemes/create:
+ *   post:
+ *     summary: Create a new scheme
+ *     tags: [Schemes]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Scheme'
+ *     responses:
+ *       201:
+ *         description: Scheme created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Scheme'
+ *       400:
+ *         description: Validation error
+ *       500:
+ *         description: Internal server error
+ */
+// Create a new scheme
+router.post('/create', isAdmin, handleValidationErrors, async (req, res) => {
+    try {
+        const scheme = new Scheme(req.body);
+        await scheme.save();
+        res.status(201).json({ success: true, scheme });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
 });
 
 module.exports = router;
