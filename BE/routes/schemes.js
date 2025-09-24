@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Scheme = require('../models/Scheme');
 const { body, validationResult, query } = require('express-validator');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req, res, next) => {
@@ -16,10 +18,21 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-function requireAdmin(req, res, next) {
-    // For demo: get user role from request body (in production, use session/JWT)
-    if (req.body && req.body.role === 'admin') return next();
-    res.status(403).json({ success: false, message: 'Not authorized' });
+const isAdmin = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ error: 'No token provided' });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (user && user.role === 'admin') {
+      req.user = user;
+      next();
+    } else {
+      res.status(403).json({ error: 'Not authorized' });
+    }
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
 }
 
 /**
@@ -629,6 +642,15 @@ router.get('/search', [
             message: 'Internal server error'
         });
     }
+});
+
+router.get('/', async (req, res) => {
+  try {
+    const schemes = await Scheme.find();
+    res.json(schemes);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch schemes' });
+  }
 });
 
 module.exports = router;

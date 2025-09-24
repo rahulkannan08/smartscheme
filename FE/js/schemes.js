@@ -9,25 +9,16 @@ let currentFilters = {};
 
 // Load schemes on page load
 async function loadSchemes() {
-    showLoading();
-    hideError();
-    hideNoResults();
-    
-    try {
-        // Check for category filter from homepage
-        const selectedCategory = localStorage.getItem('selectedCategory');
-        if (selectedCategory) {
-            document.getElementById('category-filter').value = selectedCategory;
-            currentFilters.category = selectedCategory;
-            localStorage.removeItem('selectedCategory');
-        }
-        
-        // Apply current filters
-        await applyFilters();
-    } catch (error) {
-        showError();
-        console.error('Error loading schemes:', error);
-    }
+  try {
+    const res = await fetch('http://localhost:5001/api/v2/schemes');
+    if (!res.ok) throw new Error('Failed to fetch schemes');
+    const schemes = await res.json();
+    if (!schemes || !Array.isArray(schemes)) throw new Error('Invalid schemes data');
+    renderSchemes(schemes);
+  } catch (err) {
+    showError();
+    console.error('Error loading schemes:', err);
+  }
 }
 
 // Show loading state
@@ -254,16 +245,6 @@ function searchSchemes() {
     }, 500);
 }
 
-// Add event listeners for search
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', searchSchemes);
-    }
-    // Load all schemes by default on page load
-    window.schemesFunctions.loadSchemes();
-});
-
 // Export functions for global access
 window.schemesFunctions = {
     loadSchemes,
@@ -273,3 +254,35 @@ window.schemesFunctions = {
     viewSchemeDetails,
     searchSchemes
 };
+
+// Add event listeners for search
+document.addEventListener('DOMContentLoaded', function() {
+    // Load all schemes when the page loads
+    loadAllSchemes();
+});
+
+// Function to load all schemes
+async function loadAllSchemes() {
+    showLoading();
+    hideError();
+    hideNoResults();
+    try {
+        const result = await window.API.schemes.getAllSchemes(1, 9); // page 1, 9 per page
+        if (!result || !result.data || !Array.isArray(result.data.schemes)) {
+            showError();
+            return;
+        }
+        schemesData = result.data.schemes;
+        totalPages = result.data.pagination?.totalPages || 1;
+        totalSchemes = result.data.pagination?.totalSchemes || 0;
+        renderSchemes();
+        renderPagination();
+        hideLoading();
+        if (schemesData.length === 0) {
+            showNoResults();
+        }
+    } catch (error) {
+        showError();
+        console.error('Error loading schemes:', error);
+    }
+}

@@ -167,27 +167,6 @@ const chatbotAPI = {
     }
 };
 
-// After successful login response from backend
-const response = await fetch('http://localhost:5001/api/v2/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, password })
-});
-const result = await response.json();
-if (result.success) {
-    localStorage.setItem('user', JSON.stringify({
-        id: result.user._id,
-        name: result.user.name,
-        role: result.user.role,
-        district: result.user.district,
-        age: result.user.age,
-        token: result.token // <-- Add this!
-    }));
-    window.location.href = 'index.html';
-} else {
-    alert(result.message);
-}
-
 // Export API functions
 window.API = {
     schemes: schemesAPI,
