@@ -16,27 +16,29 @@
     document.getElementById('loginForm').onsubmit = async function(e) {
         e.preventDefault();
         const form = e.target;
-        const res = await fetch('http://localhost:5001/api/auth/login', {
+        const name = form.name.value;
+        const password = form.password.value;
+
+        const response = await fetch('http://localhost:5001/api/v2/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: form.name.value,
-                password: form.password.value
-            })
+            body: JSON.stringify({ name, password })
         });
-        const result = await res.json();
+        const result = await response.json();
         if (result.success) {
-            localStorage.setItem('user', JSON.stringify(result.user));
-            alert('Login successful!');
-            if (result.user.role === 'admin') {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'index.html';
-            }
+            localStorage.setItem('user', JSON.stringify({
+                id: result.user._id,
+                name: result.user.name,
+                role: result.user.role,
+                district: result.user.district,
+                age: result.user.age,
+                token: result.token // <-- This saves the JWT token!
+            }));
+            window.location.href = 'index.html';
         } else {
             alert(result.message);
         }
     };
     </script>
-</body>
-</html>
+    </script>
+</body></html>

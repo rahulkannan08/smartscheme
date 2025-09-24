@@ -73,7 +73,7 @@ async function applyFilters() {
     showLoading();
     hideError();
     hideNoResults();
-    
+
     try {
         // Get filter values
         const searchValue = document.getElementById('search-input').value.trim();
@@ -97,22 +97,24 @@ async function applyFilters() {
             response = await window.API.schemes.getFilteredSchemes(currentFilters, currentPage, 9);
         }
 
-        // Update global variables (match backend response)
-        schemesData = (response.data && response.data.schemes) ? response.data.schemes : [];
-        totalPages = (response.data && response.data.pagination && response.data.pagination.totalPages) ? response.data.pagination.totalPages : 1;
-        totalSchemes = (response.data && response.data.pagination && response.data.pagination.totalSchemes) ? response.data.pagination.totalSchemes : 0;
+        // Safe check for response structure
+        if (!response || !response.data || !Array.isArray(response.data.schemes)) {
+            showError();
+            return;
+        }
 
-        // Render schemes
+        const schemesArray = response.data.schemes;
+        schemesData = schemesArray;
+        totalPages = response.data.pagination?.totalPages || 1;
+        totalSchemes = response.data.pagination?.totalSchemes || 0;
+
         renderSchemes();
         renderPagination();
-
         hideLoading();
 
-        // Show no results if no schemes found
         if (schemesData.length === 0) {
             showNoResults();
         }
-
     } catch (error) {
         showError();
         console.error('Error applying filters:', error);

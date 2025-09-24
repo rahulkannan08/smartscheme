@@ -65,71 +65,70 @@
         <button onclick="deleteScheme()">Delete</button>
     </div>
     <script>
-    // Add Scheme
-    document.getElementById('addSchemeForm').onsubmit = async function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || user.role !== 'admin') {
-            alert('Only admin can add schemes!');
-            return;
+    const user = JSON.parse(localStorage.getItem('user'));
+if (!user || user.role !== 'admin') {
+    alert('Access denied! Only admin can view this page.');
+    window.location.href = 'index.html'; // Redirect to home
+}
+
+// Add Scheme
+document.getElementById('addSchemeForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const token = user?.token; // Get token from user object
+    const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Add this line
+        },
+        body: JSON.stringify({
+            title: form.title.value,
+            description: form.description.value,
+            category: form.category.value,
+            district: form.district.value,
+            eligibility: {
+                age: { min: form.minAge.value, max: form.maxAge.value }
+            },
+            status: 'Active'
+        })
+    });
+    const result = await res.json();
+    alert(result.message);
+};
+
+// Edit Scheme
+async function editScheme() {
+    const schemeId = document.getElementById('schemeId').value;
+    const token = user?.token;
+    const newTitle = prompt('Enter new title:');
+    if (!schemeId || !newTitle) return;
+    const res = await fetch(`http://localhost:5001/api/v2/schemes/update/${schemeId}`, {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Add this line
+        },
+        body: JSON.stringify({ title: newTitle })
+    });
+    const result = await res.json();
+    alert(result.message);
+}
+
+// Delete Scheme
+async function deleteScheme() {
+    const schemeId = document.getElementById('schemeId').value;
+    const token = user?.token;
+    if (!schemeId) return;
+    const res = await fetch(`http://localhost:5001/api/v2/schemes/delete/${schemeId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}` // Add this line
         }
-        const token = user?.token; // Get token from user object
-        const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Add this line
-            },
-            body: JSON.stringify({
-                title: form.title.value,
-                description: form.description.value,
-                category: form.category.value,
-                district: form.district.value,
-                eligibility: {
-                    age: { min: form.minAge.value, max: form.maxAge.value }
-                },
-                status: 'Active'
-            })
-        });
-        const result = await res.json();
-        alert(result.message);
-    };
-
-    // Edit Scheme
-    async function editScheme() {
-        const schemeId = document.getElementById('schemeId').value;
-        const user = JSON.parse(localStorage.getItem('user'));
-        const token = user?.token;
-        const newTitle = prompt('Enter new title:');
-        if (!schemeId || !newTitle) return;
-        const res = await fetch(`http://localhost:5001/api/v2/schemes/update/${schemeId}`, {
-            method: 'PUT',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Add this line
-            },
-            body: JSON.stringify({ title: newTitle })
-        });
-        const result = await res.json();
-        alert(result.message);
-    }
-
-    // Delete Scheme
-    async function deleteScheme() {
-        const schemeId = document.getElementById('schemeId').value;
-        const user = JSON.parse(localStorage.getItem('user'));
-        const token = user?.token;
-        if (!schemeId) return;
-        const res = await fetch(`http://localhost:5001/api/v2/schemes/delete/${schemeId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}` // Add this line
-            }
-        });
-        const result = await res.json();
-        alert(result.message);
-    }
+    });
+    const result = await res.json();
+    alert(result.message);
+}
     </script>
 </body>
 </html>

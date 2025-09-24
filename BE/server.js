@@ -88,7 +88,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
 // API Routes
 app.use('/api/v2/schemes', schemesRoutes);
 app.use(geminiKeyRoute);
-app.use('/api/auth', authRoutes);
+app.use('/api/v2/auth', authRoutes);
 
 
 // 404 handler

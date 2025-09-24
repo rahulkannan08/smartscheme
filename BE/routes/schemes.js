@@ -79,44 +79,34 @@ function requireAdmin(req, res, next) {
  *         description: Internal server error
  */
 // Get all schemes with pagination
-router.get('/get-all-schemes', [
-    query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
-    query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50'),
-    handleValidationErrors
-], async (req, res) => {
+router.get('/get-all-schemes', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 9;
-        const skip = (page - 1) * limit;
+        const query = { status: 'Active' }; // Only active schemes
 
-        const schemes = await Scheme.find({ status: 'Active' })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit)
-            .select('-__v');
+        const totalSchemes = await Scheme.countDocuments(query);
+        const totalPages = Math.ceil(totalSchemes / limit);
 
-        const total = await Scheme.countDocuments({ status: 'Active' });
-        const totalPages = Math.ceil(total / limit);
+        const schemes = await Scheme.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit);
 
-        res.status(200).json({
+        res.json({
             success: true,
             data: {
                 schemes,
                 pagination: {
                     currentPage: page,
                     totalPages,
-                    totalSchemes: total,
+                    totalSchemes,
                     hasNextPage: page < totalPages,
                     hasPrevPage: page > 1
                 }
             }
         });
     } catch (error) {
-        console.error('Error fetching schemes:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
@@ -634,239 +624,6 @@ router.get('/search', [
         });
     } catch (error) {
         console.error('Error searching schemes:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
-    }
-});
-
-// Admin routes (protected)
-/**
- * @swagger
- * /api/v2/schemes/create:
- *   post:
- *     summary: Create a new scheme
- *     tags: [Admin]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *               - description
- *               - category
- *               - benefits
- *               - documents
- *               - applicationProcess
- *               - governmentBody
- *             properties:
- *               title:
- *                 type: string
- *                 example: "Pradhan Mantri Kisan Samman Nidhi"
- *               description:
- *                 type: string
- *                 example: "Income support scheme for farmers"
- *               category:
- *                 type: string
- *                 enum: [Agriculture, Education, Healthcare, Employment, Housing, Women Empowerment, Youth Development, Senior Citizens, Disability, Financial Inclusion, Technology, Environment, Rural Development, Urban Development, Other]
- *                 example: "Agriculture"
- *               benefits:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["₹6,000 per year", "Direct benefit transfer"]
- *               documents:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["Land ownership documents", "Bank account details"]
- *               applicationProcess:
- *                 type: string
- *                 example: "Apply online through PM-KISAN portal"
- *               governmentBody:
- *                 type: string
- *                 example: "Ministry of Agriculture & Farmers Welfare"
- *     responses:
- *       201:
- *         description: Scheme created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Scheme created successfully"
- *                 data:
- *                   $ref: '#/components/schemas/Scheme'
- *       400:
- *         description: Validation error
- *       500:
- *         description: Internal server error
- */
-// Create new scheme
-router.post('/create', requireAdmin, [
-    body('title').notEmpty().withMessage('Title is required'),
-    body('description').notEmpty().withMessage('Description is required'),
-    body('category').isIn([
-        'Agriculture', 'Education', 'Healthcare', 'Employment', 'Housing',
-        'Women Empowerment', 'Youth Development', 'Senior Citizens', 'Disability',
-        'Financial Inclusion', 'Technology', 'Environment', 'Rural Development',
-        'Urban Development', 'Other'
-    ]).withMessage('Invalid category'),
-    body('benefits').isArray({ min: 1 }).withMessage('At least one benefit is required'),
-    body('documents').isArray({ min: 1 }).withMessage('At least one document is required'),
-    body('applicationProcess').notEmpty().withMessage('Application process is required'),
-    body('governmentBody').notEmpty().withMessage('Government body is required'),
-    body('apply').isObject().withMessage('Apply field is required'),
-    body('apply.how').notEmpty().withMessage('Application method is required'),
-    body('apply.site').notEmpty().withMessage('Application site is required'),
-    handleValidationErrors
-], async (req, res) => {
-    try {
-        const scheme = new Scheme(req.body);
-        await scheme.save();
-
-        res.status(201).json({
-            success: true,
-            message: 'Scheme created successfully',
-            data: scheme
-        });
-    } catch (error) {
-        console.error('Error creating scheme:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
-    }
-});
-
-/**
- * @swagger
- * /api/v2/schemes/update/{id}:
- *   put:
- *     summary: Update a scheme
- *     tags: [Admin]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Scheme ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
- *               category:
- *                 type: string
- *               benefits:
- *                 type: array
- *                 items:
- *                   type: string
- *               documents:
- *                 type: array
- *                 items:
- *                   type: string
- *               applicationProcess:
- *                 type: string
- *               governmentBody:
- *                 type: string
- *               status:
- *                 type: string
- *                 enum: [Active, Inactive]
- *               featured:
- *                 type: boolean
- *     responses:
- *       200:
- *         description: Scheme updated successfully
- *       404:
- *         description: Scheme not found
- *       500:
- *         description: Internal server error
- */
-// Update scheme
-router.put('/update/:id', requireAdmin, async (req, res) => {
-    try {
-        const scheme = await Scheme.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true }
-        ).select('-__v');
-
-        if (!scheme) {
-            return res.status(404).json({
-                success: false,
-                message: 'Scheme not found'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'Scheme updated successfully',
-            data: scheme
-        });
-    } catch (error) {
-        console.error('Error updating scheme:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
-    }
-});
-
-/**
- * @swagger
- * /api/v2/schemes/delete/{id}:
- *   delete:
- *     summary: Delete a scheme
- *     tags: [Admin]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Scheme ID
- *     responses:
- *       200:
- *         description: Scheme deleted successfully
- *       404:
- *         description: Scheme not found
- *       500:
- *         description: Internal server error
- */
-// Delete scheme
-router.delete('/delete/:id', requireAdmin, async (req, res) => {
-    try {
-        const scheme = await Scheme.findByIdAndDelete(req.params.id);
-
-        if (!scheme) {
-            return res.status(404).json({
-                success: false,
-                message: 'Scheme not found'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'Scheme deleted successfully'
-        });
-    } catch (error) {
-        console.error('Error deleting scheme:', error);
         res.status(500).json({
             success: false,
             message: 'Internal server error'
