@@ -679,7 +679,7 @@ router.get('/', async (req, res) => {
  *         description: Internal server error
  */
 // Create a new scheme
-router.post('/create', isAdmin, handleValidationErrors, async (req, res) => {
+router.post('/', isAdmin, handleValidationErrors, async (req, res) => {
     try {
         const scheme = new Scheme(req.body);
         await scheme.save();

@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
         if (!valid) return res.status(401).json({ success: false, message: 'Invalid password' });
 
         // Create JWT token
-        const jwtToken = jwt.sign({ id: user._id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
+        const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         // Exclude password from user data
         const { password: pwd, ...userData } = user._doc;

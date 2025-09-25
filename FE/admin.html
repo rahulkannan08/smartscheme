@@ -84,12 +84,14 @@ document.getElementById('addSchemeForm').onsubmit = async (e) => {
     const form = e.target;
 const formData = {
     name: form.elements['name'].value,
+    description: form.elements['description'].value,
     category: form.elements['category'].value,
     district: form.elements['district'].value,
     amount: form.elements['amount'].value,
-    // etc.
+    minAge: form.elements['minAge'].value,
+    maxAge: form.elements['maxAge'].value,
 };
-    const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
+    const res = await fetch('http://localhost:5001/api/v2/schemes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
