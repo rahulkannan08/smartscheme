@@ -245,6 +245,28 @@ function searchSchemes() {
     }, 500);
 }
 
+// Fetch schemes with filters
+function fetchSchemesWithFilters() {
+    const category = document.querySelector('#category-select').value;
+    const district = document.querySelector('#district-select').value;
+    const level = document.querySelector('#level-select').value;
+
+    const params = new URLSearchParams();
+    if (category) params.append('category', category);
+    if (district) params.append('district', district);
+    if (level) params.append('level', level);
+
+    fetch(`http://localhost:5001/api/v2/schemes/?${params.toString()}`)
+        .then(response => response.json())
+        .then(data => renderSchemes(data));
+}
+
+// Attach to filter button
+document.querySelector('#filter-btn').addEventListener('click', fetchSchemesWithFilters);
+
+// Optionally, fetch all schemes on page load
+window.addEventListener('DOMContentLoaded', fetchSchemesWithFilters);
+
 // Export functions for global access
 window.schemesFunctions = {
     loadSchemes,

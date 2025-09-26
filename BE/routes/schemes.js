@@ -647,7 +647,20 @@ router.get('/search', [
 
 router.get('/', async (req, res) => {
   try {
-    const schemes = await Scheme.find();
+    const { category, district, level } = req.query;
+    const filter = {};
+
+    if (category && category !== 'All Categories') {
+        filter.category = category;
+    }
+    if (district && district !== 'All Districts') {
+        filter.district = district;
+    }
+    if (level && level !== 'All Levels') {
+        filter.level = level;
+    }
+
+    const schemes = await Scheme.find(filter);
     res.json(schemes);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch schemes' });

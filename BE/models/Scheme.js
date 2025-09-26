@@ -50,7 +50,7 @@ const schemeSchema = new mongoose.Schema({
         },
         education: {
             type: String,
-            enum: ['No Education', 'Primary', 'Secondary', 'Higher Secondary', 'Graduate', 'Post Graduate', 'Any'],
+            enum: ['Any', 'High School', 'Graduate', 'Post Graduate', '8th Standard'], // Add '8th Standard'
             default: 'Any'
         },
         gender: {
@@ -108,7 +108,10 @@ const schemeSchema = new mongoose.Schema({
             'Ranipet',
             'Tirupathur',
             'Mayiladuthurai',
-            'Kallakurichi'
+            'Kallakurichi' ,
+            'Trichy' ,
+            'Kanyakumari',
+            'Thoothukudi'
         ],
         default: 'All Districts'
     },
