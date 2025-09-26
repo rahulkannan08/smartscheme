@@ -52,36 +52,39 @@ function setupEventListeners() {
         });
     }
     
-    document.getElementById('addSchemeForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const user = JSON.parse(localStorage.getItem('user'));
-        const token = user?.token;
-        if (!token) {
-            alert('You must be logged in as admin.');
-            return;
-        }
-        const formData = {
-            // collect form fields here
-            name: e.target.elements['name'].value,
-            category: e.target.elements['category'].value,
-            // ...other fields...
+    const form = document.getElementById('addSchemeForm');
+    if (form) {
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = user?.token;
+            if (!token) {
+                alert('You must be logged in as admin.');
+                return;
+            }
+            const formData = {
+                // collect form fields here
+                name: e.target.elements['name'].value,
+                category: e.target.elements['category'].value,
+                // ...other fields...
+            };
+            const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+            const result = await res.json();
+            if (res.ok) {
+                alert('Scheme added successfully!');
+                // Optionally reload schemes
+            } else {
+                alert(result.message || 'Failed to add scheme');
+            }
         };
-        const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formData)
-        });
-        const result = await res.json();
-        if (res.ok) {
-            alert('Scheme added successfully!');
-            // Optionally reload schemes
-        } else {
-            alert(result.message || 'Failed to add scheme');
-        }
-    };
+    }
 }
 
 // FAQ Toggle functionality

@@ -3,68 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Panel - SMART THITTAM</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Admin Panel</h2>
-    <div>
-        <h3>Add Scheme</h3>
-        <form id="addSchemeForm">
-            <input type="text" id="name" name="name" placeholder="Title" required>
-            <input type="text" id="description" name="description" placeholder="Description" required>
-            <input type="text" id="category" name="category" placeholder="Category" required>
-            <select id="district" name="district" required>
-                <option value="All Districts">All Districts</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Coimbatore">Coimbatore</option>
-                <option value="Madurai">Madurai</option>
-                <option value="Salem">Salem</option>
-                <option value="Tiruchirappalli">Tiruchirappalli</option>
-                <option value="Vellore">Vellore</option>
-                <option value="Erode">Erode</option>
-                <option value="Tiruppur">Tiruppur</option>
-                <option value="Tirunelveli">Tirunelveli</option>
-                <option value="Thoothukkudi">Thoothukkudi</option>
-                <option value="Dindigul">Dindigul</option>
-                <option value="Thanjavur">Thanjavur</option>
-                <option value="Villupuram">Villupuram</option>
-                <option value="Kanchipuram">Kanchipuram</option>
-                <option value="Cuddalore">Cuddalore</option>
-                <option value="Pudukkottai">Pudukkottai</option>
-                <option value="Sivaganga">Sivaganga</option>
-                <option value="Ramanathapuram">Ramanathapuram</option>
-                <option value="Virudhunagar">Virudhunagar</option>
-                <option value="Karur">Karur</option>
-                <option value="Namakkal">Namakkal</option>
-                <option value="Theni">Theni</option>
-                <option value="Krishnagiri">Krishnagiri</option>
-                <option value="Dharmapuri">Dharmapuri</option>
-                <option value="Tiruvannamalai">Tiruvannamalai</option>
-                <option value="Ariyalur">Ariyalur</option>
-                <option value="Perambalur">Perambalur</option>
-                <option value="Nagapattinam">Nagapattinam</option>
-                <option value="Tiruvarur">Tiruvarur</option>
-                <option value="Nilgiris">Nilgiris</option>
-                <option value="Tenkasi">Tenkasi</option>
-                <option value="Chengalpattu">Chengalpattu</option>
-                <option value="Ranipet">Ranipet</option>
-                <option value="Tirupathur">Tirupathur</option>
-                <option value="Mayiladuthurai">Mayiladuthurai</option>
-                <option value="Kallakurichi">Kallakurichi</option>
-            </select>
-            <input type="number" id="amount" name="amount" placeholder="Amount" required>
-            <input type="number" name="minAge" placeholder="Min Age" required>
-            <input type="number" name="maxAge" placeholder="Max Age" required>
-            <button type="submit">Add Scheme</button>
-        </form>
-    </div>
-    <div>
-        
-        <h3>Edit/Delete Scheme</h3>
-        <input type="text" id="schemeId" placeholder="Scheme ID">
-        <button onclick="editScheme()">Edit</button>
-        <button onclick="deleteScheme()">Delete</button>
-    </div>
+    <main>
+        <div class="container" style="max-width:700px;margin:2rem auto;">
+            <div class="card fade-in" style="padding:2rem;">
+                <h2 class="section-title mb-4">Admin Panel</h2>
+                <h3>Add Scheme</h3>
+                <form id="addSchemeForm">
+                    <input type="text" id="name" name="name" class="input" placeholder="Title" required>
+                    <input type="text" id="description" name="description" class="input" placeholder="Description" required>
+                    <input type="text" id="category" name="category" class="input" placeholder="Category" required>
+                    <select id="district" name="district" class="input" required>
+                        <option value="All Districts">All Districts</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Coimbatore">Coimbatore</option>
+                        <option value="Madurai">Madurai</option>
+                        <option value="Salem">Salem</option>
+                        <option value="Tiruchirappalli">Tiruchirappalli</option>
+                        <option value="Vellore">Vellore</option>
+                        <option value="Erode">Erode</option>
+                        <option value="Tiruppur">Tiruppur</option>
+                        <option value="Tirunelveli">Tirunelveli</option>
+                        <option value="Thoothukkudi">Thoothukkudi</option>
+                        <option value="Dindigul">Dindigul</option>
+                        <option value="Thanjavur">Thanjavur</option>
+                        <option value="Villupuram">Villupuram</option>
+                        <option value="Kanchipuram">Kanchipuram</option>
+                        <option value="Cuddalore">Cuddalore</option>
+                        <option value="Pudukkottai">Pudukkottai</option>
+                        <option value="Sivaganga">Sivaganga</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Virudhunagar">Virudhunagar</option>
+                        <option value="Karur">Karur</option>
+                        <option value="Namakkal">Namakkal</option>
+                        <option value="Theni">Theni</option>
+                        <option value="Krishnagiri">Krishnagiri</option>
+                        <option value="Dharmapuri">Dharmapuri</option>
+                        <option value="Tiruvannamalai">Tiruvannamalai</option>
+                        <option value="Ariyalur">Ariyalur</option>
+                        <option value="Perambalur">Perambalur</option>
+                        <option value="Nagapattinam">Nagapattinam</option>
+                        <option value="Tiruvarur">Tiruvarur</option>
+                        <option value="Nilgiris">Nilgiris</option>
+                        <option value="Tenkasi">Tenkasi</option>
+                        <option value="Chengalpattu">Chengalpattu</option>
+                        <option value="Ranipet">Ranipet</option>
+                        <option value="Tirupathur">Tirupathur</option>
+                        <option value="Mayiladuthurai">Mayiladuthurai</option>
+                        <option value="Kallakurichi">Kallakurichi</option>
+                    </select>
+                    <input type="number" id="amount" name="amount" class="input" placeholder="Amount" required>
+                    <input type="number" name="minAge" class="input" placeholder="Min Age" required>
+                    <input type="number" name="maxAge" class="input" placeholder="Max Age" required>
+                    <button type="submit" class="btn btn-primary w-full">Add Scheme</button>
+                </form>
+                <hr class="my-4">
+                <h3>Edit/Delete Scheme</h3>
+                <input type="text" id="schemeId" class="input" placeholder="Scheme ID">
+                <button onclick="editScheme()" class="btn btn-secondary">Edit</button>
+                <button onclick="deleteScheme()" class="btn btn-secondary">Delete</button>
+            </div>
+        </div>
+    </main>
     <script>
     const user = JSON.parse(localStorage.getItem('user'));
 if (!user || user.role !== 'admin') {

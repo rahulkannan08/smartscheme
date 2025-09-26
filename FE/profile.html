@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile - SMART THITTAM</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>User Profile</h2>
-    <div id="profile-container"></div>
+    <main>
+        <div class="container" style="max-width:400px;margin:3rem auto;">
+            <div class="card fade-in" style="padding:2rem;">
+                <h2 class="section-title mb-4">User Profile</h2>
+                <div id="profile-container"></div>
+                <div class="mt-4 text-center">
+                    <a href="index.html" class="btn btn-secondary">Home</a>
+                </div>
+            </div>
+        </div>
+    </main>
     <script>
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {

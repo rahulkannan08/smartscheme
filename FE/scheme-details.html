@@ -3,18 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Scheme Details</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <header>
         <!-- ...existing header code... -->
     </header>
     <main>
-        <div id="scheme-details-container">
-            <h1 id="scheme-title">Loading...</h1>
-            <p id="scheme-description"></p>
-            <!-- Add more fields as needed -->
-            <div id="apply-section"></div>
+        <div class="container" style="max-width:700px;margin:2rem auto;">
+            <div class="card fade-in" id="scheme-details-card" style="padding:2rem;">
+                <h2 id="scheme-title" class="section-title mb-4">Loading...</h2>
+                <div id="scheme-description" class="mb-4"></div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="card" style="padding:1rem;">
+                        <h3 style="color:#74B83E;">Eligibility</h3>
+                        <div id="scheme-eligibility"></div>
+                    </div>
+                    <div class="card" style="padding:1rem;">
+                        <h3 style="color:#74B83E;">Benefits</h3>
+                        <div id="scheme-benefits"></div>
+                    </div>
+                </div>
+                <div class="card" style="padding:1rem;">
+                    <h3 style="color:#74B83E;">Application Info</h3>
+                    <div id="apply-section"></div>
+                </div>
+                <div class="mt-8 text-center">
+                    <a href="schemes.html" class="btn btn-secondary">← Back to Schemes</a>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
@@ -29,7 +46,6 @@
             window.location.href = 'login.html';
         }
 
-        // Get scheme ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const schemeId = urlParams.get('id');
 
@@ -38,23 +54,31 @@
                 .then(data => {
                     document.getElementById('scheme-title').textContent = data.title || 'Scheme Details';
 
-                    let detailsHtml = '';
-                    if (data.description) {
-                        detailsHtml += `<p>${data.description}</p>`;
+                    // Description
+                    let descHtml = '';
+                    if (data.description) descHtml += `<p>${data.description}</p>`;
+                    if (data.category) descHtml += `<p><span class="badge badge-primary">${data.category}</span></p>`;
+                    if (data.district) descHtml += `<p><strong>District:</strong> ${data.district}</p>`;
+                    document.getElementById('scheme-description').innerHTML = descHtml;
+
+                    // Eligibility
+                    const eligibility = data.eligibility;
+                    if (typeof eligibility === 'object') {
+                        // If it's an array, show as list
+                        if (Array.isArray(eligibility)) {
+                            document.getElementById('scheme-eligibility').innerHTML =
+                                '<ul>' + eligibility.map(e => `<li>${e}</li>`).join('') + '</ul>';
+                        } else {
+                            // If it's an object, show its values as list
+                            document.getElementById('scheme-eligibility').innerHTML =
+                                '<ul>' + Object.values(eligibility).map(e => `<li>${e}</li>`).join('') + '</ul>';
+                        }
+                    } else {
+                        document.getElementById('scheme-eligibility').textContent = eligibility || 'Not specified';
                     }
-                    if (data.category) {
-                        detailsHtml += `<p><strong>Category:</strong> ${data.category}</p>`;
-                    }
-                    if (data.eligibility) {
-                        detailsHtml += `<p><strong>Eligibility:</strong> ${data.eligibility}</p>`;
-                    }
-                    if (data.benefits) {
-                        detailsHtml += `<p><strong>Benefits:</strong> ${data.benefits}</p>`;
-                    }
-                    if (data.district) {
-                        detailsHtml += `<p><strong>District:</strong> ${data.district}</p>`;
-                    }
-                    document.getElementById('scheme-description').innerHTML = detailsHtml;
+
+                    // Benefits
+                    document.getElementById('scheme-benefits').innerHTML = data.benefits ? data.benefits : 'Not specified';
 
                     // Apply section
                     let applyHtml = '';
@@ -66,12 +90,13 @@
                             applyHtml += `<p><strong>Where to Apply:</strong> <a href="${data.apply.site}" target="_blank">${data.apply.site}</a></p>`;
                         }
                     }
-                    document.getElementById('apply-section').innerHTML = applyHtml;
-
+                    document.getElementById('apply-section').innerHTML = applyHtml || 'Not specified';
                 })
                 .catch(err => {
                     document.getElementById('scheme-title').textContent = 'Error loading scheme';
                     document.getElementById('scheme-description').textContent = err.message;
+                    document.getElementById('scheme-eligibility').textContent = '';
+                    document.getElementById('scheme-benefits').textContent = '';
                     document.getElementById('apply-section').textContent = '';
                 });
         } else {
@@ -79,6 +104,8 @@
             document.getElementById('scheme-description').innerHTML =
                 'Please select a scheme from the schemes list to view details.<br>' +
                 '<small>Tip: Open this page with a valid scheme ID, e.g. <code>scheme-details.html?id=SCHEME_ID</code></small>';
+            document.getElementById('scheme-eligibility').textContent = '';
+            document.getElementById('scheme-benefits').textContent = '';
             document.getElementById('apply-section').textContent = '';
         }
     </script>
