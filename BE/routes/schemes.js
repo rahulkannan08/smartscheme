@@ -4,6 +4,7 @@ const Scheme = require('../models/Scheme');
 const { body, validationResult, query } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { authenticateToken, isAdmin } = require('../utils/auth');
 
 // Middleware to handle validation errors
 const handleValidationErrors = (req, res, next) => {
@@ -18,23 +19,16 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-const isAdmin = async (req, res, next) => {
+// Add new scheme (admin only)
+router.post('/', authenticateToken, isAdmin, async (req, res) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) return res.status(401).json({ message: 'No token provided' });
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        if (user && user.role === 'admin') {
-            req.user = user;
-            next();
-        } else {
-            res.status(403).json({ message: 'Not authorized' });
-        }
+        const scheme = new Scheme(req.body);
+        await scheme.save();
+        res.status(201).json({ message: 'Scheme added successfully', scheme });
     } catch (err) {
-        res.status(401).json({ message: 'Invalid token' });
+        res.status(400).json({ message: err.message });
     }
-}
+});
 
 /**
  * @swagger

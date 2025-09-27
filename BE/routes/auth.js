@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { authenticateToken, isAdmin } = require('../utils/auth');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -38,6 +39,27 @@ router.post('/login', async (req, res) => {
             user: userData,
             token: jwtToken
         });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+});
+
+// Protected routes
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(401).json({ success: false, message: 'User not found' });
+        res.json(user);
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+});
+
+// Admin-only routes
+router.get('/admin', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const users = await User.find({ role: 'admin' });
+        res.json(users);
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }

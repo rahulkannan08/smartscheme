@@ -50,8 +50,7 @@ const schemeSchema = new mongoose.Schema({
         },
         education: {
             type: String,
-            enum: ['Any', 'High School', 'Graduate', 'Post Graduate', '8th Standard'], // Add '8th Standard'
-            default: 'Any'
+            enum: ['None', 'Primary', 'Secondary', '12th Pass', 'Graduate', 'Postgraduate']
         },
         gender: {
             type: String,

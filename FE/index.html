@@ -122,25 +122,25 @@
             <div class="container">
                 <h2 class="section-title">Scheme Categories</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4">
-                    <div class="card" onclick="filterByCategory('Education')">
+                    <div class="card" onclick="selectCategoryAndGo('Education')">
                         <div class="card-icon">
                             <span class="material-icons">school</span>
                         </div>
                         <h3>Education</h3>
                     </div>
-                    <div class="card" onclick="filterByCategory('Agriculture')">
+                    <div class="card" onclick="selectCategoryAndGo('Agriculture')">
                         <div class="card-icon">
                             <span class="material-icons">agriculture</span>
                         </div>
                         <h3>Agriculture</h3>
                     </div>
-                    <div class="card" onclick="filterByCategory('Healthcare')">
+                    <div class="card" onclick="selectCategoryAndGo('Healthcare')">
                         <div class="card-icon">
                             <span class="material-icons">local_hospital</span>
                         </div>
                         <h3>Healthcare</h3>
                     </div>
-                    <div class="card" onclick="filterByCategory('Women Empowerment')">
+                    <div class="card" onclick="selectCategoryAndGo('Women Empowerment')">
                         <div class="card-icon">
                             <span class="material-icons">women</span>
                         </div>
@@ -335,6 +335,12 @@ function renderAuthButtons() {
     }
 }
 renderAuthButtons();
+</script>
+<script>
+function selectCategoryAndGo(category) {
+    localStorage.setItem('selectedCategory', category);
+    window.location.href = 'schemes.html';
+}
 </script>
 </body>
 </html>
