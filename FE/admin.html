@@ -71,7 +71,7 @@
                     <input type="text" name="tags" class="input" placeholder="Tags (comma separated)">
                     <input type="text" name="benefits" class="input" placeholder="Benefits (comma separated)">
                     <input type="text" name="documents" class="input" placeholder="Documents (comma separated)">
-                    <input type="text" name="applicationProcess" class="input" placeholder="Application Process">
+                    <input type="text" name="applicationProcess" class="input" placeholder="Application Process" required>
                     <input type="text" name="deadline" class="input" placeholder="Deadline (optional)">
                     <!-- Eligibility -->
                     <h4>Eligibility</h4>
@@ -125,6 +125,8 @@ if (!user || user.role !== 'admin') {
     window.location.href = 'index.html'; // Redirect to home
 }
 
+let editingSchemeId = null;
+
 // Add Scheme
 document.getElementById('addSchemeForm').onsubmit = async (e) => {
     e.preventDefault();
@@ -173,8 +175,18 @@ document.getElementById('addSchemeForm').onsubmit = async (e) => {
             how: form.applyHow.value
         }
     };
-    const res = await fetch('http://localhost:5001/api/v2/schemes', {
-        method: 'POST',
+
+    let url = 'http://localhost:5001/api/v2/schemes';
+    let method = 'POST';
+
+    // If editing, update instead of create
+    if (editingSchemeId) {
+        url = `http://localhost:5001/api/v2/schemes/${editingSchemeId}`;
+        method = 'PUT';
+    }
+
+    const res = await fetch(url, {
+        method,
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -183,44 +195,92 @@ document.getElementById('addSchemeForm').onsubmit = async (e) => {
     });
     const result = await res.json();
     if (res.ok) {
-        alert(result.message || 'Scheme added!');
+        alert(result.message || (editingSchemeId ? 'Scheme updated!' : 'Scheme added!'));
         window.location.href = 'schemes.html'; // Redirect to schemes list
     } else {
-        alert(result.message || 'Failed to add scheme');
+        alert(result.message || 'Failed to save scheme');
     }
+    editingSchemeId = null; // Reset after submit
 };
 
 // Edit Scheme
 async function editScheme() {
-    const schemeId = document.getElementById('schemeId').value;
+    const schemeId = document.getElementById('schemeId').value.trim();
     const token = user?.token;
-    const newTitle = prompt('Enter new title:');
-    if (!schemeId || !newTitle) return;
-    const res = await fetch(`http://localhost:5001/api/v2/schemes/update/${schemeId}`, {
-        method: 'PUT',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Add this line
-        },
-        body: JSON.stringify({ title: newTitle })
+    if (!schemeId) {
+        alert('Please enter a Scheme ID.');
+        return;
+    }
+    // Fetch existing scheme data
+    const getRes = await fetch(`http://localhost:5001/api/v2/schemes/${schemeId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
     });
-    const result = await res.json();
-    alert(result.message);
+    if (!getRes.ok) {
+        alert('Scheme not found.');
+        return;
+    }
+    const scheme = await getRes.json();
+
+    // Auto-fill the form fields with the fetched scheme data
+    const form = document.getElementById('addSchemeForm');
+    form.title.value = scheme.title || '';
+    form.description.value = scheme.description || '';
+    form.category.value = scheme.category || '';
+    form.district.value = scheme.district || '';
+    form.level.value = scheme.level || '';
+    form.budgetAmount.value = scheme.budget?.amount || '';
+    form.budgetCurrency.value = scheme.budget?.currency || '';
+    form.governmentBody.value = scheme.governmentBody || '';
+    form.status.value = scheme.status || '';
+    form.tags.value = (scheme.tags || []).join(', ');
+    form.benefits.value = (scheme.benefits || []).join(', ');
+    form.documents.value = (scheme.documents || []).join(', ');
+    form.applicationProcess.value = scheme.applicationProcess || '';
+    form.deadline.value = scheme.deadline || '';
+
+    // Eligibility
+    form.minAge.value = scheme.eligibility?.age?.min || '';
+    form.maxAge.value = scheme.eligibility?.age?.max || '';
+    form.minIncome.value = scheme.eligibility?.income?.min || '';
+    form.maxIncome.value = scheme.eligibility?.income?.max || '';
+    form.education.value = scheme.eligibility?.education || '';
+    form.gender.value = scheme.eligibility?.gender || '';
+    form.location.value = scheme.eligibility?.location || '';
+    form.occupation.value = scheme.eligibility?.occupation || '';
+    form.otherRequirements.value = (scheme.eligibility?.otherRequirements || []).join(', ');
+
+    // Contact Info
+    form.contactPhone.value = scheme.contactInfo?.phone || '';
+    form.contactEmail.value = scheme.contactInfo?.email || '';
+    form.contactWebsite.value = scheme.contactInfo?.website || '';
+    form.contactAddress.value = scheme.contactInfo?.address || '';
+
+    // Apply Info
+    form.applySite.value = scheme.apply?.site || '';
+    form.applyHow.value = scheme.apply?.how || '';
+
+    editingSchemeId = schemeId;
+
+    alert('Scheme data loaded. You can now edit and submit the form to update.');
 }
 
 // Delete Scheme
 async function deleteScheme() {
-    const schemeId = document.getElementById('schemeId').value;
+    const schemeId = document.getElementById('schemeId').value.trim();
     const token = user?.token;
-    if (!schemeId) return;
-    const res = await fetch(`http://localhost:5001/api/v2/schemes/delete/${schemeId}`, {
+    if (!schemeId) {
+        alert('Please enter a Scheme ID.');
+        return;
+    }
+    if (!confirm('Are you sure you want to delete this scheme?')) return;
+    const res = await fetch(`http://localhost:5001/api/v2/schemes/${schemeId}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${token}` // Add this line
+            'Authorization': `Bearer ${token}`
         }
     });
     const result = await res.json();
-    alert(result.message);
+    alert(result.message || (res.ok ? 'Scheme deleted!' : 'Failed to delete scheme'));
 }
     </script>
 </body>

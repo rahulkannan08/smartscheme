@@ -63,19 +63,32 @@
 
                     // Eligibility
                     const eligibility = data.eligibility;
-                    if (typeof eligibility === 'object') {
-                        // If it's an array, show as list
-                        if (Array.isArray(eligibility)) {
-                            document.getElementById('scheme-eligibility').innerHTML =
-                                '<ul>' + eligibility.map(e => `<li>${e}</li>`).join('') + '</ul>';
-                        } else {
-                            // If it's an object, show its values as list
-                            document.getElementById('scheme-eligibility').innerHTML =
-                                '<ul>' + Object.values(eligibility).map(e => `<li>${e}</li>`).join('') + '</ul>';
+                    let eligibilityHtml = '<ul>';
+                    if (eligibility) {
+                        if (eligibility.age) {
+                            eligibilityHtml += `<li><strong>Age:</strong> ${eligibility.age.min || ''} - ${eligibility.age.max || ''}</li>`;
                         }
-                    } else {
-                        document.getElementById('scheme-eligibility').textContent = eligibility || 'Not specified';
+                        if (eligibility.income) {
+                            eligibilityHtml += `<li><strong>Income:</strong> ${eligibility.income.min || ''} - ${eligibility.income.max || ''}</li>`;
+                        }
+                        if (eligibility.education) {
+                            eligibilityHtml += `<li><strong>Education:</strong> ${eligibility.education}</li>`;
+                        }
+                        if (eligibility.gender) {
+                            eligibilityHtml += `<li><strong>Gender:</strong> ${eligibility.gender}</li>`;
+                        }
+                        if (eligibility.location) {
+                            eligibilityHtml += `<li><strong>Location:</strong> ${eligibility.location}</li>`;
+                        }
+                        if (eligibility.occupation) {
+                            eligibilityHtml += `<li><strong>Occupation:</strong> ${eligibility.occupation}</li>`;
+                        }
+                        if (eligibility.otherRequirements && eligibility.otherRequirements.length) {
+                            eligibilityHtml += `<li><strong>Other Requirements:</strong> ${eligibility.otherRequirements.join(', ')}</li>`;
+                        }
                     }
+                    eligibilityHtml += '</ul>';
+                    document.getElementById('scheme-eligibility').innerHTML = eligibilityHtml;
 
                     // Benefits
                     document.getElementById('scheme-benefits').innerHTML = data.benefits ? data.benefits : 'Not specified';
