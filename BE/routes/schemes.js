@@ -696,4 +696,37 @@ router.post('/', isAdmin, handleValidationErrors, async (req, res) => {
     }
 });
 
+// Get a single scheme by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const scheme = await Scheme.findById(req.params.id);
+        if (!scheme) return res.status(404).json({ message: 'Scheme not found' });
+        res.json(scheme);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update a scheme by ID
+router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const scheme = await Scheme.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!scheme) return res.status(404).json({ message: 'Scheme not found' });
+        res.json({ message: 'Scheme updated', scheme });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a scheme by ID
+router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const scheme = await Scheme.findByIdAndDelete(req.params.id);
+        if (!scheme) return res.status(404).json({ message: 'Scheme not found' });
+        res.json({ message: 'Scheme deleted' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;
