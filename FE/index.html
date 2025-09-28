@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMART THITTAM - Tamil Nadu Government Scheme Portal</title>
-    
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
-    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Nunito:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -26,43 +22,32 @@
             <img src="assets/images/lionsymbol.png" alt="logo">
             <h1>Tamil Nadu SMART SCHEME</h1>
         </div>
-        <nav>
-            <a href="index.html">
-                <span class="material-icons">home</span>
-                <p>Home</p>
-            </a>
-            <a href="#about">
-                <span class="material-icons">info</span>
-                <p>About</p>
-            </a>
-            <a href="schemes.html">
-                <span class="material-icons">description</span>
-                <p>Schemes</p>
-            </a>
-        </nav>
-        <button class="mobile-menu-btn" id="mobile-menu-btn">
-            <span class="material-icons">menu</span>
-        </button>
-        
-        <!-- Mobile Menu -->
-        <div id="mobile-menu">
-            <a href="index.html">
-                <span class="material-icons">home</span>
-                Home
-            </a>
-            <a href="#about">
-                <span class="material-icons">info</span>
-                About
-            </a>
-            <a href="schemes.html">
-                <span class="material-icons">description</span>
-                Schemes
-            </a>
+        <div class="header-center">
+            <nav>
+                <a href="index.html">
+                    <span class="material-icons">home</span>
+                    <p>Home</p>
+                </a>
+                <a href="#about">
+                    <span class="material-icons">info</span>
+                    <p>About</p>
+                </a>
+                <a href="schemes.html">
+                    <span class="material-icons">description</span>
+                    <p>Schemes</p>
+                </a>
+            </nav>
         </div>
-
-        <!-- Authentication Buttons -->
-        <div class="auth-buttons" id="auth-buttons" style="position:absolute;top:24px;right:24px;display:flex;gap:12px;">
-            <!-- Buttons will be rendered by JS -->
+        <div class="header-right">
+            <div class="auth-buttons" id="auth-buttons"></div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+        <div id="mobile-menu">
+            <a href="index.html"><span class="material-icons">home</span>Home</a>
+            <a href="#about"><span class="material-icons">info</span>About</a>
+            <a href="schemes.html"><span class="material-icons">description</span>Schemes</a>
         </div>
     </header>
 
@@ -269,16 +254,13 @@
                     </div>
                 </div>
                 <div class="footer-section">
-                    <h4>Follow Us</h4>
+                    <h4>Follow Me</h4>
                     <div class="flex gap-4">
-                        <a href="#">
-                            <span class="material-icons">facebook</span>
+                        <a href="https://github.com/rahulkannan08" target="_blank" rel="noopener">
+                            <span class="material-icons">code</span> GitHub
                         </a>
-                        <a href="#">
-                            <span class="material-icons">twitter</span>
-                        </a>
-                        <a href="#">
-                            <span class="material-icons">youtube</span>
+                        <a href="https://discord.com/channels/rahul_08_" target="_blank" rel="noopener">
+                            <span class="material-icons">chat</span> Discord
                         </a>
                     </div>
                 </div>
@@ -299,48 +281,46 @@
         });
     </script>
     <script>
-function renderAuthButtons() {
-    const authDiv = document.getElementById('auth-buttons');
-    authDiv.innerHTML = '';
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-        // Show user profile
-        const profileBtn = document.createElement('a');
-        profileBtn.href = 'profile.html';
-        profileBtn.className = 'btn btn-secondary';
-        profileBtn.textContent = user.name;
-        authDiv.appendChild(profileBtn);
+    function renderAuthButtons() {
+        const authDiv = document.getElementById('auth-buttons');
+        authDiv.innerHTML = '';
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const profileBtn = document.createElement('a');
+            profileBtn.href = 'profile.html';
+            profileBtn.className = 'btn btn-secondary';
+            profileBtn.textContent = user.name;
+            authDiv.appendChild(profileBtn);
 
-        const logoutBtn = document.createElement('button');
-        logoutBtn.className = 'btn btn-primary';
-        logoutBtn.textContent = 'Logout';
-        logoutBtn.onclick = function() {
-            localStorage.removeItem('user');
-            window.location.reload();
-        };
-        authDiv.appendChild(logoutBtn);
-    } else {
-        // Show login/register
-        const loginBtn = document.createElement('a');
-        loginBtn.href = 'login.html';
-        loginBtn.className = 'btn btn-secondary';
-        loginBtn.textContent = 'Login';
-        authDiv.appendChild(loginBtn);
+            const logoutBtn = document.createElement('button');
+            logoutBtn.className = 'btn btn-primary';
+            logoutBtn.textContent = 'Logout';
+            logoutBtn.onclick = function() {
+                localStorage.removeItem('user');
+                window.location.reload();
+            };
+            authDiv.appendChild(logoutBtn);
+        } else {
+            const loginBtn = document.createElement('a');
+            loginBtn.href = 'login.html';
+            loginBtn.className = 'btn btn-secondary';
+            loginBtn.textContent = 'Login';
+            authDiv.appendChild(loginBtn);
 
-        const registerBtn = document.createElement('a');
-        registerBtn.href = 'register.html';
-        registerBtn.className = 'btn btn-primary';
-        registerBtn.textContent = 'Register';
-        authDiv.appendChild(registerBtn);
+            const registerBtn = document.createElement('a');
+            registerBtn.href = 'register.html';
+            registerBtn.className = 'btn btn-primary';
+            registerBtn.textContent = 'Register';
+            authDiv.appendChild(registerBtn);
+        }
     }
-}
-renderAuthButtons();
-</script>
-<script>
-function selectCategoryAndGo(category) {
-    localStorage.setItem('selectedCategory', category);
-    window.location.href = 'schemes.html';
-}
-</script>
+    renderAuthButtons();
+    </script>
+    <script>
+    function selectCategoryAndGo(category) {
+        localStorage.setItem('selectedCategory', category);
+        window.location.href = 'schemes.html';
+    }
+    </script>
 </body>
 </html>

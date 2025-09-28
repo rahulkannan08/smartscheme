@@ -24,23 +24,33 @@
             <img src="assets/images/lionsymbol.png" alt="logo">
             <h1>Tamil Nadu SMART SCHEME</h1>
         </div>
-        <nav>
-            <a href="index.html">
-                <span class="material-icons">home</span>
-                <p>Home</p>
-            </a>
-            <a href="index.html#about">
-                <span class="material-icons">info</span>
-                <p>About</p>
-            </a>
-            <a href="schemes.html">
-                <span class="material-icons">description</span>
-                <p>Schemes</p>
-            </a>
-        </nav>
-        <button class="mobile-menu-btn" id="mobile-menu-btn">
-            <span class="material-icons">menu</span>
-        </button>
+
+        <div class="header-center">
+            <nav>
+                <a href="index.html">
+                    <span class="material-icons">home</span>
+                    <p>Home</p>
+                </a>
+                <a href="index.html#about">
+                    <span class="material-icons">info</span>
+                    <p>About</p>
+                </a>
+                <a href="schemes.html">
+                    <span class="material-icons">description</span>
+                    <p>Schemes</p>
+                </a>
+            </nav>
+        </div>
+
+        <div class="header-right">
+            <!-- Authentication Buttons -->
+            <div class="auth-buttons" id="auth-buttons">
+                <!-- Buttons will be rendered by JS -->
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
         
         <!-- Mobile Menu -->
         <div id="mobile-menu">
@@ -57,11 +67,6 @@
                 Schemes
             </a>
         </div>
-
-        <!-- Authentication Buttons -->
-        <div class="auth-buttons" id="auth-buttons" style="position:absolute;top:24px;right:24px;display:flex;gap:12px;">
-    <!-- Buttons will be rendered by JS -->
-</div>
     </header>
 
     <!-- Main Content -->
