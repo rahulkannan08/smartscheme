@@ -6,9 +6,9 @@ header {
     padding: 0 2rem;
     /* background-color: #74B83E; */ /* Remove or comment out this line */
     min-height: 80px;
-    position: fixed;
+    position: fixed;                         
     top: 0;
-    width: 100%;
+    width: 100%;   
     z-index: 100;
     overflow: visible;
     flex-wrap: wrap;

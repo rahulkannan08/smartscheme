@@ -3,7 +3,8 @@ if (!window.SMART_API_LOADED) {
 
     // API Base URL - Backend Integration
     if (typeof API_BASE_URL === "undefined") {
-        var API_BASE_URL = 'http://localhost:5001/api';
+        //var API_BASE_URL = 'http://localhost:5001/api';
+        var API_BASE_URL = 'https://smart-scheme-backend.onrender.com/api';
     }
 
     // API Configuration
