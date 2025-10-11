@@ -12,6 +12,7 @@ const swaggerSpecs = require('./config/swagger');
 const schemesRoutes = require('./routes/schemes');
 const geminiKeyRoute = require('./api-gemini-key');
 const authRoutes = require('./routes/auth');
+const Scheme = require('./models/Scheme');
 
 
 const app = express();
@@ -33,6 +34,10 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+// Ensure OPTIONS (preflight) requests are handled and return proper CORS headers
+app.options('*', cors(corsOptions));
+
 
 // Optional: In production you may want to control allowed origins via an env var
 // const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://127.0.0.1:5500,file://,https://smartscheme.vercel.app').split(',');
@@ -70,16 +75,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // MongoDB Connection
-const connectDB = async () => {
+const connectDB = async (retries = 5, delayMs = 5000) => {
+    if (!process.env.MONGODB_URI) {
+        console.error('MONGODB_URI is not set. Please set the environment variable.');
+        // If running in Render, we want to fail fast so user can see the config mistake.
+        process.exit(1);
+    }
+
     try {
         const conn = await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
+        return conn;
     } catch (error) {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
+        console.error(`MongoDB connection error (attempts left: ${retries}):`, error && error.stack ? error.stack : error);
+        if (retries > 0) {
+            console.log(`Retrying MongoDB connection in ${delayMs / 1000}s...`);
+            await new Promise(res => setTimeout(res, delayMs));
+            return connectDB(retries - 1, Math.min(delayMs * 2, 60000));
+        } else {
+            console.error('Failed to connect to MongoDB after multiple attempts. Exiting.');
+            process.exit(1);
+        }
     }
 };
 
@@ -95,6 +114,33 @@ app.get('/api/health', (req, res) => {
         environment: process.env.NODE_ENV
     });
 });
+
+    // Debug endpoint (safe: does not return secrets)
+    app.get('/api/debug', async (req, res) => {
+        try {
+            const mongooseState = mongoose.connection.readyState; // 0 = disconnected, 1 = connected
+            const hasMongoUri = !!process.env.MONGODB_URI;
+            const nodeEnv = process.env.NODE_ENV || 'undefined';
+
+            let schemesCount = null;
+            try {
+                schemesCount = await Scheme.countDocuments();
+            } catch (err) {
+                schemesCount = `error: ${err && err.message ? err.message : String(err)}`;
+            }
+
+            return res.status(200).json({
+                success: true,
+                mongooseState,
+                hasMongoUri,
+                nodeEnv,
+                schemesCount
+            });
+        } catch (err) {
+            console.error('/api/debug error:', err);
+            return res.status(500).json({ success: false, message: 'Debug check failed' });
+        }
+    });
 
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
@@ -119,7 +165,21 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use((err, req, res, next) => {
     console.error('Error:', err);
-    
+
+    // If request origin is allowed, echo it back on error responses so browser accepts them
+    try {
+        const allowedOrigins = corsOptions.origin || [];
+        const requestOrigin = req.headers.origin;
+        if (requestOrigin && allowedOrigins.indexOf(requestOrigin) !== -1) {
+            res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+        }
+    } catch (hdrErr) {
+        console.error('Error setting CORS headers on error response:', hdrErr);
+    }
+
     res.status(err.status || 500).json({
         success: false,
         message: err.message || 'Internal server error',
