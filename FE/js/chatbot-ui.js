@@ -219,7 +219,7 @@
         // Fetch Gemini API key from backend (use full URL)
         let apiKey = '';
         try {
-            const res = await fetch('http://localhost:5001/api/get-gemini-key');
+        const res = await fetch('https://smartscheme-backend.onrender.com/api/get-gemini-key');
             const data = await res.json();
             apiKey = data.key;
         } catch (err) {

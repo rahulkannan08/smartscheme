@@ -14,6 +14,10 @@ const options = {
     },
     servers: [
       {
+        url: 'https://smartscheme-backend.onrender.com',
+        description: 'Production server'
+      },
+      {
         url: 'http://localhost:5001',
         description: 'Development server'
       }

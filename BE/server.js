@@ -26,12 +26,29 @@ const corsOptions = {
         'http://localhost:3000',
         'http://127.0.0.1:5500',
         'http://localhost:5001',
-        'file://'
+        'file://',
+        'https://smartscheme.vercel.app'
     ],
     credentials: true,
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+// Optional: In production you may want to control allowed origins via an env var
+// const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://127.0.0.1:5500,file://,https://smartscheme.vercel.app').split(',');
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//         if (!origin) return callback(null, true);
+//         if (allowedOrigins.indexOf(origin) !== -1) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('CORS not allowed for origin ' + origin));
+//         }
+//     },
+//     credentials: true,
+//     optionsSuccessStatus: 200
+// };
+// app.use(cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({

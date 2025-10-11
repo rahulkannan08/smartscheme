@@ -176,12 +176,12 @@ document.getElementById('addSchemeForm').onsubmit = async (e) => {
         }
     };
 
-    let url = 'http://localhost:5001/api/v2/schemes';
+    let url = 'https://smartscheme-backend.onrender.com/api/v2/schemes';
     let method = 'POST';
 
     // If editing, update instead of create
     if (editingSchemeId) {
-        url = `http://localhost:5001/api/v2/schemes/${editingSchemeId}`;
+    url = `https://smartscheme-backend.onrender.com/api/v2/schemes/${editingSchemeId}`;
         method = 'PUT';
     }
 
@@ -212,7 +212,7 @@ async function editScheme() {
         return;
     }
     // Fetch existing scheme data
-    const getRes = await fetch(`http://localhost:5001/api/v2/schemes/${schemeId}`, {
+    const getRes = await fetch(`https://smartscheme-backend.onrender.com/api/v2/schemes/${schemeId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!getRes.ok) {
@@ -273,7 +273,7 @@ async function deleteScheme() {
         return;
     }
     if (!confirm('Are you sure you want to delete this scheme?')) return;
-    const res = await fetch(`http://localhost:5001/api/v2/schemes/${schemeId}`, {
+    const res = await fetch(`https://smartscheme-backend.onrender.com/api/v2/schemes/${schemeId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`

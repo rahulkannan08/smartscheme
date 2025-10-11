@@ -3,8 +3,8 @@ if (!window.SMART_API_LOADED) {
 
     // API Base URL - Backend Integration
     if (typeof API_BASE_URL === "undefined") {
-        //var API_BASE_URL = 'http://localhost:5001/api';
-        var API_BASE_URL = 'https://smart-scheme-backend.onrender.com/api';
+        // Production backend URL (use your actual deployed backend)
+        var API_BASE_URL = 'https://smartscheme-backend.onrender.com/api';
     }
 
     // API Configuration
@@ -19,7 +19,7 @@ if (!window.SMART_API_LOADED) {
     // Generic API request function
     async function apiRequest(endpoint, options = {}) {
         const url = `${apiConfig.baseURL}${endpoint}`;
-        
+
         const config = {
             method: 'GET',
             headers: {
@@ -31,11 +31,11 @@ if (!window.SMART_API_LOADED) {
 
         try {
             const response = await fetch(url, config);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const data = await response.json();
             return data;
         } catch (error) {
@@ -64,7 +64,7 @@ if (!window.SMART_API_LOADED) {
                     limit: limit.toString(),
                     ...filters
                 });
-                
+
                 const response = await apiRequest(`/v2/schemes/get-filtered-schemes?${params}`);
                 return response;
             } catch (error) {
@@ -100,8 +100,8 @@ if (!window.SMART_API_LOADED) {
             // Fetch Gemini API key from backend
             let apiKey = '';
             try {
-                // Always use full backend URL
-                const res = await fetch('http://localhost:5001/api/get-gemini-key');
+                // Always use backend URL
+                const res = await fetch(`${API_BASE_URL}/get-gemini-key`);
                 const data = await res.json();
                 apiKey = data.key;
             } catch (err) {
@@ -147,7 +147,7 @@ if (!window.SMART_API_LOADED) {
                     const response = await fetch(apiUrl, requestOptions);
                     if (!response.ok) {
                         const errorData = await response.json();
-                        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error.message}`);
+                        throw new Error(`API error: ${response.status} ${response.statusText} - ${errorData.error?.message || ''}`);
                     }
                     const result = await response.json();
                     const candidate = result.candidates?.[0];
@@ -173,7 +173,7 @@ if (!window.SMART_API_LOADED) {
 
     // Example registration function
     async function registerUser(userData) {
-        const response = await fetch('http://localhost:5001/api/auth/register', {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
@@ -192,17 +192,17 @@ if (!window.SMART_API_LOADED) {
     // Error handling utility
     function handleAPIError(error, fallbackMessage = 'Something went wrong') {
         console.error('API Error:', error);
-        
+
         let message = fallbackMessage;
         if (error.message) {
             message = error.message;
         }
-        
+
         // Show error toast
         if (window.SMART_THITTAM && window.SMART_THITTAM.showToast) {
             window.SMART_THITTAM.showToast(message, 'error');
         }
-        
+
         return {
             success: false,
             message: message
@@ -214,7 +214,7 @@ if (!window.SMART_API_LOADED) {
         if (window.SMART_THITTAM && window.SMART_THITTAM.showToast) {
             window.SMART_THITTAM.showToast(message, 'success');
         }
-        
+
         return {
             success: true,
             data: data,

@@ -68,7 +68,7 @@ function setupEventListeners() {
                 category: e.target.elements['category'].value,
                 // ...other fields...
             };
-            const res = await fetch('http://localhost:5001/api/v2/schemes/create', {
+            const res = await fetch('https://smartscheme-backend.onrender.com/api/v2/schemes/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

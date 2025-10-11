@@ -10,7 +10,7 @@ let currentFilters = {};
 // Load schemes on page load
 async function loadSchemes() {
   try {
-    const res = await fetch('http://localhost:5001/api/v2/schemes');
+  const res = await fetch('https://smartscheme-backend.onrender.com/api/v2/schemes');
     if (!res.ok) throw new Error('Failed to fetch schemes');
     const schemes = await res.json();
     if (!schemes || !Array.isArray(schemes)) throw new Error('Invalid schemes data');
