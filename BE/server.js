@@ -83,9 +83,14 @@ const connectDB = async (retries = 5, delayMs = 5000) => {
     }
 
     try {
+        // Add explicit timeouts so failed server selection surfaces more clearly
         const conn = await mongoose.connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            // Wait up to 30s to find a suitable server before timing out
+            serverSelectionTimeoutMS: 30000,
+            connectTimeoutMS: 30000,
+            socketTimeoutMS: 45000
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         return conn;
@@ -104,6 +109,23 @@ const connectDB = async (retries = 5, delayMs = 5000) => {
 
 // Connect to MongoDB
 connectDB();
+
+// Mongoose connection event listeners for clearer runtime logs
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose event: connected');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('Mongoose event: error', err && err.message ? err.message : err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('Mongoose event: disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+    console.log('Mongoose event: reconnected');
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
