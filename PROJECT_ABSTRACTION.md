@@ -63,3 +63,26 @@ The proposed SMART SCHEME system addresses these issues by providing:
 ---
 
 **In summary, SMART SCHEME transforms the fragmented, manual process of scheme discovery and application into a seamless, digital experience, empowering Tamil Nadu citizens to access the benefits they deserve.**
+
+---
+
+# BIBLIOGRAPHY
+
+1. Shelly, G. B., & Rosenblatt, H. J., Systems Analysis and Design, Cengage Learning, 10th Edition, 2018.  
+2. Pressman, R. S., Software Engineering: A Practitioner’s Approach, McGraw-Hill Education, 9th Edition, 2014.  
+3. Flanagan, D., JavaScript: The Definitive Guide, O’Reilly Media, 7th Edition, 2020.  
+4. Freeman, E., Robson, E., Bates, B., & Sierra, K., Head First HTML and CSS, O’Reilly Media, 2nd Edition, 2012.  
+5. MongoDB Documentation — https://docs.mongodb.com  
+6. React Official Documentation — https://reactjs.org/docs/getting-started.html  
+7. Node.js Documentation — https://nodejs.org/en/docs/  
+8. Express.js Documentation — https://expressjs.com/en/4x/api.html  
+9. W3Schools: HTML, CSS, JavaScript Tutorials — https://www.w3schools.com  
+10. TutorialsPoint: MERN / Full-Stack Tutorials — https://www.tutorialspoint.com/mern_stack/  
+11. Firebase Documentation — https://firebase.google.com/docs  
+12. Gemini (Google AI) API Documentation — https://developers.generativeai.google/ (or provider docs as applicable)  
+13. Swagger / OpenAPI Documentation — https://swagger.io/docs/  
+14. MDN Web Docs (JavaScript, HTML, CSS) — https://developer.mozilla.org/  
+15. Vercel (Next.js) Deployment Guide — https://vercel.com/docs  
+16. Stack Overflow — https://stackoverflow.com (for community Q&A and troubleshooting)  
+
+(Include above references in the project report; cite appropriate items where used.)
